@@ -36,6 +36,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 		return -1;							// エラーが起きたら直ちに終了
 	}
 
+	// マウスカーソルを表示する
+	SetMouseDispFlag(TRUE);				// これでマウスが表示されます
+
 	// ウィンドウ描画モード設定
 	SetDrawScreen(DX_SCREEN_BACK);			// 裏画面に描画する
 
