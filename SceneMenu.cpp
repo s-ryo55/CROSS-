@@ -6,8 +6,7 @@
 void SceneMenu::Init()
 {
 	// ”wŒi‰æ‘œ‚Ì“Çž
-	this->bg0.Load_image("data/menu.png");
-	this->game_start.Load_image( "data/start.png");
+	this->bg0.Load_image("ed.png");
 }
 
 /// <summary>
