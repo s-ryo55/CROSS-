@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Jiki.cpp" />
+    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="SceneEd.cpp" />
     <ClCompile Include="SceneMenu.cpp" />
     <ClCompile Include="SceneOp.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Jiki.h" />
     <ClInclude Include="KeyReader.h" />
+    <ClInclude Include="Mouse.h" />
     <ClInclude Include="SceneBase.h" />
     <ClInclude Include="SceneEd.h" />
     <ClInclude Include="SceneMenu.h" />
