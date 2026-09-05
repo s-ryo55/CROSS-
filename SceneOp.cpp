@@ -5,7 +5,7 @@
 void SceneOp::Init()
 {
 	// ”wŒi‰æ‘œ‚Ì“Çž
-	this->bg0.Load_image("op.png");
+	this->bg0.Load_image("data/cross3.png");
 }
 
 /// <summary>
