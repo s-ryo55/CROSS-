@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "SceneOp.h"
+#include "SceneMenu.h"
 #include "SceneTest.h"
 #include "SceneEd.h"
 
@@ -12,13 +13,17 @@ void Game::Game_loop()
 	SceneOp op_scene(this);							// シーンをローカル変数として宣言
 	this->scene_arr[0] = &op_scene;					// ローカル変数のポインタを取得して登録
 
+	// メニューシーンをシーンリストに登録
+	SceneMenu menu_scene(this);						// シーンをローカル変数として宣言
+	this->scene_arr[1] = &menu_scene;				// ローカル変数のポインタを取得して登録
+
 	// テストシーンをシーンリストに登録
 	SceneTest test_scene(this);						// シーンをローカル変数として宣言
-	this->scene_arr[1] = &test_scene;				// ローカル変数のポインタを取得して登録
+	this->scene_arr[2] = &test_scene;				// ローカル変数のポインタを取得して登録
 
 	// エンディングシーンをシーンリストに登録
 	SceneEd ed_scene(this);							// シーンをローカル変数として宣言
-	this->scene_arr[2] = &ed_scene;					// ローカル変数のポインタを取得して登録
+	this->scene_arr[3] = &ed_scene;					// ローカル変数のポインタを取得して登録
 
 
 	// オープニングシーンを選択
