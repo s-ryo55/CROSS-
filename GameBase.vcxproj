@@ -136,6 +136,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Jiki.cpp" />
     <ClCompile Include="SceneEd.cpp" />
+    <ClCompile Include="SceneMenu.cpp" />
     <ClCompile Include="SceneOp.cpp" />
     <ClCompile Include="SceneTest.cpp" />
     <ClCompile Include="WinMain.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="KeyReader.h" />
     <ClInclude Include="SceneBase.h" />
     <ClInclude Include="SceneEd.h" />
+    <ClInclude Include="SceneMenu.h" />
     <ClInclude Include="SceneOp.h" />
     <ClInclude Include="SceneTest.h" />
     <ClInclude Include="Sprite.h" />
