@@ -3,6 +3,7 @@
 
 #include "Game.h"			// ゲームクラス
 #include "Background.h"		// 背景クラス
+#include "Sprite.h"		// スプライトクラス
 
 /// <summary>
 /// エンディングシーン（SceneBaseクラスの子クラス）
@@ -17,6 +18,9 @@ class SceneMenu : public SceneBase
 
 	// 背景クラスのインスタンス
 	Background bg0;
+
+	Sprite game_start;
+
 
 public:
 	/// <summary>
