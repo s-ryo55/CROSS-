@@ -10,6 +10,9 @@ void SceneMenu::Init()
 	this->game_start.Load_image("data/start.png");
 	this->game_rule.Load_image("data/asobikata.png");
 	this->game_exit.Load_image("data/end.png");
+	this->game_start.Set_pos(50, 350);
+	this->game_rule.Set_pos(50, 450);
+	this->game_exit.Set_pos(50, 550);
 }
 
 /// <summary>
