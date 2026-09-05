@@ -8,6 +8,9 @@ void SceneMenu::Init()
 	// ”wŒi‰æ‘œ‚Ì“Çž
 	this->bg0.Load_image("ed.png");
 	this->game_start.Load_image( "game_start.png");
+	this->game_rule.Load_image( "game_rule.png");
+	this->game_exit.Load_image( "game_exit.png");
+
 }
 
 /// <summary>

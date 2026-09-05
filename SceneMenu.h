@@ -21,6 +21,12 @@ class SceneMenu : public SceneBase
 
 	Sprite game_start;
 
+	Sprite game_rule;
+
+	Sprite game_exit;
+
+
+
 
 public:
 	/// <summary>
