@@ -10,6 +10,10 @@ void SceneTest::Init()
 {
 	// ”wŒi‰æ‘œ‚Ì“Çž
 	this->bg0.Load_image("data/ingame.png");
+	this->reverse_select[0].Load_image("data/reverse.png");
+	this->reverse_select[1].Load_image("data/reverse_select_lock.png");
+	this->reach_select[0].Load_image("data/reach.png");
+	this->reach_select[1].Load_image("data/reach_lock.png");
 
 	for(int x = 0; x <7; x++){
 		for(int y = 0; y < 7; y++){
@@ -23,6 +27,11 @@ void SceneTest::Init()
 			this->board_surface[x][y][0].Set_pos(100 + x * 72, 200 + y * 63);
 
 		}
+	}
+
+	for(int i = 0; i < 2; i++) {
+		this->reverse_select[i].Set_pos(15, 100);
+		this->reach_select[i].Set_pos(150, 100);
 	}
 
 
@@ -75,7 +84,7 @@ void SceneTest::Draw()
 	}
 
 
-
+	
 
 }
 

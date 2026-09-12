@@ -27,7 +27,8 @@ class SceneTest : public SceneBase
 
 	Mouse mouse;
 
-
+	Sprite reverse_select[2];
+	Sprite reach_select[2];
 
 
 
