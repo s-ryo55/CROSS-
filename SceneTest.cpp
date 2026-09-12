@@ -5,7 +5,7 @@
 void SceneTest::Init()
 {
 	// ”wŒi‰æ‘œ‚Ì“Çž
-	this->bg0.Load_image("bg.png");
+	this->bg0.Load_image("data/ingame.png");
 
 	// Ž©‹@‚Ì‰ŠúˆÊ’uÝ’è
 	this->jiki_ptr->Set_pos(1280 / 2 - 24, 720 / 2 -24);
