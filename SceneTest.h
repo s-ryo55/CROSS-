@@ -6,6 +6,8 @@
 #include "Jiki.h"			// 自機クラス
 #include "KeyReader.h"		// キーリーダー
 #include "Mouse.h"			// マウス
+#include "Board.h"          // ボードクラス
+
 /// <summary>
 /// テストシーン（SceneBaseクラスの子クラス）
 /// </summary>
@@ -21,7 +23,9 @@ class SceneTest : public SceneBase
 
 	Sprite board_surface[7][7][4];
 
-	Sprite board_surface_state[7][7];
+	Board board_state;
+
+	Mouse mouse;
 
 
 
