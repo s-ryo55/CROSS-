@@ -19,8 +19,8 @@ void SceneMenu::Init()
 		this->game_rule[i].Set_pos(50, 450);
 		this->game_exit[i].Set_pos(50, 550);
 	}
-	this->game_rule_text.Load_image("data/images.jpg");
-	this->game_rule_text.Set_pos(50, 100);
+	this->game_rule_text.Load_image("data/asobikata_bg.png");
+	this->game_rule_text.Set_pos(133, 75);
 
 }
 void SceneMenu::Input()
