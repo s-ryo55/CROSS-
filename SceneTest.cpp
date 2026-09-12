@@ -2,6 +2,7 @@
 #include "DxLib.h"
 
 
+
 void SceneTest::Init()
 {
 	// ”wŒi‰æ‘œ‚Ì“Ç

@@ -5,7 +5,7 @@
 #include "Background.h"		// 背景クラス
 #include "Jiki.h"			// 自機クラス
 #include "KeyReader.h"		// キーリーダー
-
+#include "Mouse.h"			// マウス
 /// <summary>
 /// テストシーン（SceneBaseクラスの子クラス）
 /// </summary>
