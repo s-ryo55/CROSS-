@@ -30,7 +30,7 @@ class SceneTest : public SceneBase
 	Sprite reverse_select[2];
 	Sprite reach_select[2];
 
-	Sprite text_turn[3];
+	Sprite text_turn[4];
 
 
 

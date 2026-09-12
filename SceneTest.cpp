@@ -35,7 +35,7 @@ void SceneTest::Init()
 		this->reach_select[i].Set_pos(150, 100);
 	}
 
-	for(int i = 0; i < 3; i++) {
+	for(int i = 1; i < 4; i++) {
 		this->text_turn[i].Load_image("data/turn_" + std::to_string(i) + ".png");
 		this->text_turn[i].Set_pos(67, 140);
 	}
@@ -97,7 +97,7 @@ void SceneTest::Draw()
 	}
 
 
-	for(int i = 0; i < 3; i++) {
+	for(int i = 1; i < 4; i++) {
 		if(board_state.GetTurn() == i) {
 			this->text_turn[i].Draw();
 		}
