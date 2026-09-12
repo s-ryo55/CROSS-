@@ -11,10 +11,8 @@ class Mouse
 
 public:
 
-	// マウスの表示
-	void Show() {
-		SetMouseDispFlag(TRUE);
-	}
+	
+	
 
 	// マウスの状態を取得する関数
 	void Read() {

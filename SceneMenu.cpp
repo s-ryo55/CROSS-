@@ -65,5 +65,5 @@ void SceneMenu::Draw()
 	this->game_rule[0].Draw();
 	this->game_exit[0].Draw();
 
-	this->mouse.Show();
+	
 }
