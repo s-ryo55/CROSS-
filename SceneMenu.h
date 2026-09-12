@@ -4,6 +4,7 @@
 #include "Game.h"			// ゲームクラス
 #include "Background.h"		// 背景クラス
 #include "Sprite.h"		// スプライトクラス
+#include "Mouse.h"		// マウスクラス
 
 /// <summary>
 /// エンディングシーン（SceneBaseクラスの子クラス）
@@ -19,13 +20,15 @@ class SceneMenu : public SceneBase
 	// 背景クラスのインスタンス
 	Background bg0;
 
-	Sprite game_start;
+	Sprite game_start[2];
 
-	Sprite game_rule;
+	Sprite game_rule[2];
 
-	Sprite game_exit;
+	Sprite game_exit[2];
 
 
+
+	Mouse mouse;
 
 
 public:
@@ -47,12 +50,12 @@ public:
 	/// <summary>
 	/// 入力処理
 	/// </summary>
-	void Input() override {};
+	void Input() override ;
 
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update() override {};
+	void Update() override ;
 
 	/// <summary>
 	/// 描画処理

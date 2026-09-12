@@ -65,6 +65,17 @@ public:
 	}
 
 	/// <summary>
+	/// 画像サイズのゲッター
+	/// </summary>
+	/// <param name="arg_width">横幅</param>
+	/// <param name="arg_height">縦幅</param>
+	void Get_size(int* arg_width, int* arg_height)
+	{
+		// 画像の横幅を取得
+		GetGraphSize(this->image_hnd, arg_width, arg_height);
+	}
+
+	/// <summary>
 	/// 表示位置の指定
 	/// </summary>
 	/// <param name="arg_x">横位置</param>

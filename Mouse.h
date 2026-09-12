@@ -3,21 +3,38 @@
 
 class Mouse 
 {
-public:
-	// マウスの状態を取得する関数
-	static bool GetMouseState(int& x, int& y, int& leftButton, int& rightButton) 
-	{
-		// DxLibの関数を使用してマウスの状態を取得
-		GetMousePoint(&x, &y);
-		leftButton = GetMouseInput() & MOUSE_INPUT_LEFT;
-		rightButton = GetMouseInput() & MOUSE_INPUT_RIGHT;
+	int mouse_x;
+	int mouse_y;
 
-		if (leftButton) {
-			 // 左ボタンが押されている場合
-			return true;
-		}
-		
+
+
+
+public:
+
+	
+	
+
+	// マウスの状態を取得する関数
+	void Read() {
+		// マウスの座標を取得
+		GetMousePoint(&this->mouse_x, &this->mouse_y);
 	}
 
+	bool IsClickSprite(Sprite& sprite) {
+		// スプライトの範囲内にマウスがあるかをチェック
+		int sprite_x, sprite_y;
+		sprite_x = sprite.Get_pos_x();
+		sprite_y = sprite.Get_pos_y();
+		int sprite_width, sprite_height;
+		sprite.Get_size(&sprite_width, &sprite_height);
+		if (this->mouse_x >= sprite_x && this->mouse_x <= sprite_x + sprite_width &&
+			this->mouse_y >= sprite_y && this->mouse_y <= sprite_y + sprite_height) {
+			// 左ボタンが押されている場合
+			if (GetMouseInput() & MOUSE_INPUT_LEFT) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 };
