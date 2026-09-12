@@ -41,12 +41,5 @@ void SceneOp::Draw()
 	// ”wŒi0‚ð•`‰æ
 	this->bg0.Draw();
 
-	// ƒƒbƒZ[ƒW‚ð•`‰æ
-	if ((this->update_cnt / 40) % 2 == 0)
-	{
-		SetFontSize(32);
-		DrawString(522, 602, "Press Any Key!!", GetColor(220, 220, 220));
-		DrawString(520, 600, "Press Any Key!!", GetColor(255, 0, 0));
-	}
 }
 
