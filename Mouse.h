@@ -6,6 +6,8 @@ class Mouse
 	int mouse_x;
 	int mouse_y;
 
+	bool wasClicked;
+
 public:
 	
 	// マウスの状態を取得する関数
@@ -32,6 +34,19 @@ public:
 			}
 		}
 		return 0;
+	}
+
+	//押したら１回だけ反応する
+	int IsClickSpriteOnce(Sprite& sprite) {
+		int clickState = IsClickSprite(sprite);
+		if (clickState == 1 && !wasClicked) {
+			wasClicked = true; // クリック状態を更新
+			return 1; // クリックされたことを返す
+		}
+		else if (clickState == 0) {
+			wasClicked = false; // マウスが範囲外に出たらクリック状態をリセット
+		}
+		return 0; // クリックされていない場合は0を返す
 	}
 
 };

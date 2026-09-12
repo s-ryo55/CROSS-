@@ -18,7 +18,19 @@ public:
 		}
 	}
 
+	void TurnTurn()
+	{
+		turn++;
+		if(turn > 3)
+		{
+			turn = 1;
+		}
+	}
 
+	int GetTurn()
+	{
+		return turn;
+	}
 
 	int GetSelect()
 	{
