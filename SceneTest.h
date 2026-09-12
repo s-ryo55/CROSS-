@@ -23,7 +23,8 @@ class SceneTest : public SceneBase
 
 	Sprite board_surface_state[7][7];
 
-
+	Sprite reverse_select[2];
+	Sprite reach_select[2];
 
 
 
