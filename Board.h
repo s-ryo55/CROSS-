@@ -17,9 +17,14 @@ public:
 		}
 	}
 
-	int getBoardState(int x, int y)
+	int GetBoardState(int x, int y)
 	{
 		return board[x][y];
+	}
+
+	void SetBoardState(int x, int y)
+	{
+		board[x][y] = turn;
 	}
 
 
