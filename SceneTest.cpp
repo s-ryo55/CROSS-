@@ -21,10 +21,11 @@ void SceneTest::Init()
 			{
 				// スプライトの初期化
 				this->board_surface[x][y][state].Load_image("data/board_" + std::to_string(state) + ".png");
+				// スプライトの表示位置を設定
+				this->board_surface[x][y][state].Set_pos(100 + x * 72, 200 + y * 63);
 			}
 
-			// スプライトの表示位置を設定
-			this->board_surface[x][y][0].Set_pos(100 + x * 72, 200 + y * 63);
+		
 
 		}
 	}
@@ -44,8 +45,14 @@ void SceneTest::Init()
 /// </summary>
 void SceneTest::Input()
 {
+	mouse.Read(); // マウスの状態を取得
+
+	board_state.SetSelect(false); // 選択状態をリセット
+	board_state.ResetSelect(); // 選択状態をリセット
 	for (int x = 0; x < 7; x++) {
 		for (int y = 0; y < 7; y++) {
+			
+
 			if (this->mouse.IsClickSprite(this->board_surface[x][y][0]) == 1)
 			{
 				// クリックされたときの処理
@@ -53,9 +60,10 @@ void SceneTest::Input()
 
 			}
 
-			if (this->mouse.IsClickSprite(this->board_surface[x][y][0]) == 2)
+			if (this->mouse.IsClickSprite(this->board_surface[x][y][0]) == 2 && board_state.GetSelect() == false && board_state.GetBoardState(x,y) == 0)
 			{
-				board_state.SetBoardState(x, y,4); 
+				board_state.SetBoardState(x, y, 4);
+				board_state.SetSelect(true);
 			}
 		}
 	}

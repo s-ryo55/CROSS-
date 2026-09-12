@@ -3,7 +3,8 @@
 
 #include "Game.h"			// ゲームクラス
 #include "Background.h"		// 背景クラス
-#include "KeyReader.h"		// キーリーダー
+#include "Sprite.h"		// スプライトクラス
+#include "Mouse.h"		// マウスクラス
 
 
 /// <summary>
@@ -19,10 +20,12 @@ class SceneOp : public SceneBase
 	/// <summary>
 	/// キーリーダーインスタンス
 	/// </summary>
-	KeyReader key_state;
+	Mouse mouse;
 
 	// 背景クラスのインスタンス
 	Background bg0;
+
+	Sprite title_text;
 
 
 public:
