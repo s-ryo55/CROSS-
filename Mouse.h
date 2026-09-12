@@ -6,7 +6,7 @@ class Mouse
 	int mouse_x;
 	int mouse_y;
 
-	bool wasClicked;
+	bool wasClicked=false;
 
 public:
 	
@@ -38,15 +38,21 @@ public:
 
 	//押したら１回だけ反応する
 	int IsClickSpriteOnce(Sprite& sprite) {
-		int clickState = IsClickSprite(sprite);
-		if (clickState == 1 && !wasClicked) {
-			wasClicked = true; // クリック状態を更新
-			return 1; // クリックされたことを返す
+		if (GetMouseInput() & MOUSE_INPUT_LEFT && wasClicked) {
+			return 0; // クリックされていない
 		}
-		else if (clickState == 0) {
-			wasClicked = false; // マウスが範囲外に出たらクリック状態をリセット
+		else {
+			int clickState = IsClickSprite(sprite);
+			if (clickState == 1 && !wasClicked) {
+				wasClicked = true;
+				return 1; // クリックされた
+			}
+			else if (clickState == 0) {
+				wasClicked = false; // マウスが範囲外に出たらリセット
+			}
+			return 0; // クリックされていない
 		}
-		return 0; // クリックされていない場合は0を返す
 	}
+
 
 };
