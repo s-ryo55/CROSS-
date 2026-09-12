@@ -8,6 +8,8 @@ protected:
 	/// </summary>
 	int update_cnt = 0;
 
+
+
 public:
 
 	/// <summary>

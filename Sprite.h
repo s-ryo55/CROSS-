@@ -25,8 +25,9 @@ protected:
 	/// </summary>
 	int pos_y = 0;
 
-public:
 
+public:
+	int hover = 0;
 	/// <summary>
 	/// デフォルトコンストラクタ
 	/// </summary>

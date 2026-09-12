@@ -26,10 +26,11 @@ class SceneMenu : public SceneBase
 
 	Sprite game_exit[2];
 
-
-
 	Mouse mouse;
 
+	Sprite game_rule_text;
+
+	
 
 public:
 	/// <summary>
