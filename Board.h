@@ -27,5 +27,10 @@ public:
 		board[x][y] = turn;
 	}
 
+	void SetBoardState(int x, int y, int state)
+	{
+		board[x][y] = state;
+	}
+
 
 };

@@ -21,7 +21,7 @@ class SceneTest : public SceneBase
 	// 背景クラスのインスタンス
 	Background bg0;
 
-	Sprite board_surface[7][7][4];
+	Sprite board_surface[7][7][5];
 
 	Board board_state;
 

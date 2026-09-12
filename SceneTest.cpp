@@ -17,7 +17,7 @@ void SceneTest::Init()
 
 	for(int x = 0; x <7; x++){
 		for(int y = 0; y < 7; y++){
-			for(int state = 0; state < 4; state++)
+			for(int state = 0; state < 5; state++)
 			{
 				// スプライトの初期化
 				this->board_surface[x][y][state].Load_image("data/board_" + std::to_string(state) + ".png");
@@ -55,7 +55,7 @@ void SceneTest::Input()
 
 			if (this->mouse.IsClickSprite(this->board_surface[x][y][0]) == 2)
 			{
-
+				board_state.SetBoardState(x, y,4); 
 			}
 		}
 	}
@@ -79,7 +79,7 @@ void SceneTest::Draw()
 	this->bg0.Draw();
 	for (int x = 0; x < 7; x++) {
 		for (int y = 0; y < 7; y++) {
-				this->board_surface[x][y][board_state.getBoardState(x, y)].Draw();
+				this->board_surface[x][y][board_state.GetBoardState(x, y)].Draw();
 		}
 	}
 
