@@ -16,22 +16,19 @@ class SceneTest : public SceneBase
 	/// </summary>
 	Game* game_ptr = nullptr;
 
-	/// <summary>
-	/// キーリーダーインスタンス
-	/// </summary>
-	KeyReader key_state;
-
 	// 背景クラスのインスタンス
 	Background bg0;
 
-	// スプライトクラスのインスタンス
-	// 自機
-	Sprite* jiki_ptr = nullptr;
-	// 敵機
-	Sprite* tekki_ptr = nullptr;
+	Sprite board_surface[7][7][4];
 
-	// 敵機方向（0：上、1：右、2：下、3：左）
-	int tekki_dir = 1;
+	Sprite board_surface_state[7][7];
+
+
+
+
+
+
+
 
 public:
 
@@ -44,10 +41,6 @@ public:
 		// Gameインスタンスのポインターを保持
 		this->game_ptr = arg_game_ptr;
 
-		// 自機インスタンスを生成
-		this->jiki_ptr = new Jiki(this, "tama_g.png");
-		// 敵機インスタンスを生成
-		this->tekki_ptr = new Sprite(this, "tama_r.png");
 
 	}
 

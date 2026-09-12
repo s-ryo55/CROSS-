@@ -2,26 +2,36 @@
 #include "DxLib.h"
 
 
+#define MAX_BOARD_X 7
+#define MAX_BOARD_Y 7
+#define MAX_BOARD_STATE 4
+
 void SceneTest::Init()
 {
 	// 背景画像の読込
 	this->bg0.Load_image("data/ingame.png");
 
-	// 自機の初期位置設定
-	this->jiki_ptr->Set_pos(1280 / 2 - 24, 720 / 2 -24);
+	for(int x = 0; x < MAX_BOARD_X; x++){
+		for(int y = 0; y < MAX_BOARD_Y; y++){
+			for(int state = 0; state < MAX_BOARD_STATE; state++)
+			{
+				// スプライトの初期化
+				this->board_surface[x][y][state].Load_image("data/board_" + std::to_string(state) + ".png");
+			}
+		}
+	}
 
-	// 敵機の初期位置設定
-	this->tekki_ptr->Set_pos(1280 - 48, 720 / 2 -24);
+
 
 }
+
 
 /// <summary>
 /// 入力処理
 /// </summary>
 void SceneTest::Input()
 {
-	// キー状態読込（一括）
-	this->key_state.Read();
+
 }
 
 /// <summary>
@@ -29,29 +39,7 @@ void SceneTest::Input()
 /// </summary>
 void SceneTest::Update()
 {
-	// スプライトを動かす
-	if(this->key_state.CheckKey(KEY_INPUT_LEFT))
-	{
-		this->jiki_ptr->Move(-2, 0);
-	}
-	if(this->key_state.CheckKey(KEY_INPUT_RIGHT))
-	{
-		this->jiki_ptr->Move(2, 0);
-	}
-	if(this->key_state.CheckKey(KEY_INPUT_UP))
-	{
-		this->jiki_ptr->Move(0, -2);
-	}
-	if(this->key_state.CheckKey(KEY_INPUT_DOWN))
-	{
-		this->jiki_ptr->Move(0, 2);
-	}
-
-	// ESCキーで終了
-	if (this->key_state.CheckKey(KEY_INPUT_ESCAPE))
-	{
-		this->game_ptr->ChageScene(2);
-	}
+	
 
 }
 
@@ -63,11 +51,7 @@ void SceneTest::Draw()
 	// 背景0を描画
 	this->bg0.Draw();
 
-	// スプライトの描画
-	// 自機の描画
-	this->jiki_ptr->Draw();
-	// 敵機の描画
-	this->tekki_ptr->Draw();
+
 
 }
 
@@ -86,27 +70,8 @@ void SceneTest::Sound_play()
 /// <param name="arg_dir">敵機方向</param>
 void SceneTest::Select_tekki_dir(int arg_dir)
 {
-	// 変化がない場合はリターン
-	if(this->tekki_dir == arg_dir)
-	{
-		return;
-	}
-
-	// 敵機方向の保持
-	this->tekki_dir = arg_dir;
-	// 敵機位置変更
-	switch(this->tekki_dir)
-	{
-	case 1:
-		// 右に移動（縦位置は自機と合わせる）
-		this->tekki_ptr->Set_pos(1280 - 48, this->jiki_ptr->Get_pos_y());
-		break;
-
-	case 3:
-		// 左に移動（縦位置は自機と合わせる）
-		this->tekki_ptr->Set_pos(0, this->jiki_ptr->Get_pos_y());
-		break;
-	}
+	
+	
 }
 
 
