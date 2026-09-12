@@ -6,6 +6,7 @@
 #define MAX_BOARD_Y 7
 #define MAX_BOARD_STATE 4
 
+
 void SceneTest::Init()
 {
 	// ”wŒi‰æ‘œ‚Ì“Ç
