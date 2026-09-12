@@ -2,18 +2,17 @@
 #include "DxLib.h"
 
 
-#define MAX_BOARD_X 7
-#define MAX_BOARD_Y 7
-#define MAX_BOARD_STATE 4
+
+
 
 void SceneTest::Init()
 {
 	// ”wŒi‰æ‘œ‚Ì“Ç
 	this->bg0.Load_image("data/ingame.png");
 
-	for(int x = 0; x < MAX_BOARD_X; x++){
-		for(int y = 0; y < MAX_BOARD_Y; y++){
-			for(int state = 0; state < MAX_BOARD_STATE; state++)
+	for(int x = 0; x <7; x++){
+		for(int y = 0; y < 7; y++){
+			for(int state = 0; state < 4; state++)
 			{
 				// ƒXƒvƒ‰ƒCƒg‚Ì‰Šú‰»
 				this->board_surface[x][y][state].Load_image("data/board_" + std::to_string(state) + ".png");
