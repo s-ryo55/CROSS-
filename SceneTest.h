@@ -33,6 +33,11 @@ class SceneTest : public SceneBase
 
 	Sprite text_turn[4];
 
+	// 追加: リバース操作モードフラグ（リバースボタンを押してからターゲットを選ぶ）
+	bool reverse_mode = false;
+
+	// 追加: 現在宣言可能なリーチ（石を置いたプレイヤーID）。0=なし
+	int reach_available_for = 0;
 
 public:
 
