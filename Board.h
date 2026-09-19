@@ -41,6 +41,10 @@ public:
 		return turn;
 	}
 
+	int GetTurn_count() {
+		return turn_count;
+	}
+
 	int GetSelect()
 	{
 		return select;
@@ -88,6 +92,10 @@ public:
 					}
 				}
 			}
+		}
+
+		for (int x = 0; x < 4; x++) {
+			int 
 		}
 
 
