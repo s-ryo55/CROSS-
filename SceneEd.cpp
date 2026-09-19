@@ -17,6 +17,6 @@ void SceneEd::Init()
 void SceneEd::Draw()
 {
 	
-		this->bg[1].Draw();
+		this->bg[board_state.].Draw();
 	
 }

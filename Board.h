@@ -17,6 +17,7 @@ class Board
 
 public:
 
+
 	Board()
 	{
 		for(int x = 0; x < 7; x++){

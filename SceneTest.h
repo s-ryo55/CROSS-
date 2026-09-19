@@ -7,6 +7,7 @@
 #include "KeyReader.h"		// キーリーダー
 #include "Mouse.h"			// マウス
 #include "Board.h"          // ボードクラス
+#include "SceneEd.h"
 
 /// <summary>
 /// テストシーン（SceneBaseクラスの子クラス）
