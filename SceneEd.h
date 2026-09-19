@@ -1,9 +1,8 @@
 #pragma once
 #include "SceneBase.h"
-
 #include "Game.h"			// ゲームクラス
 #include "Background.h"		// 背景クラス
-
+#include "Board.h"
 /// <summary>
 /// エンディングシーン（SceneBaseクラスの子クラス）
 /// </summary>
@@ -18,7 +17,9 @@ class SceneEd : public SceneBase
 	// 背景クラスのインスタンス
 	Background bg[4];
 
+	Board board_state;
 public:
+	int winner = 0;
 	/// <summary>
 	/// コンストラクター
 	/// </summary>
