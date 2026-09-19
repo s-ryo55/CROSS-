@@ -6,7 +6,7 @@ class Board
 {
 	int board[7][7] ;
 	int turn = 1;
-	int turn_count = 0;
+	int turn_count = 1;
 
 	int select_x = 0;
 	int select_y = 0;
@@ -61,70 +61,39 @@ public:
 		}
 	}
 
-	//@select_x‚Æselect_y‚ğ’†S‚É‚V‚˜‚V‚ğæ“¾‚·‚éŠÖ”
+	
 	int GetBoardStateAroundSelect()
 	{
-		int board_x = select_x - 3;
-		int board_x_max = select_x + 3;
-		int board_y = select_y - 3;
-		int board_y_max = select_y + 3;
-
-		if (board_x < 0) board_x = 0;
-		if (board_y < 0) board_y = 0;
-		if (board_x_max > 6) board_x_max = 6;
-		if (board_y_max > 6) board_y_max = 6;
-
-		int x_judge[7];
-		int y_judge[7];
-
-		int line_count_y = 0;
-		int line_count_x = 0;
-
-		for (int x = board_x; x <= board_x_max; x++)
-		{
-			for (int y = board_y; y <= board_y_max; y++)
-			{
-				if(board[x][y] == turn_count)
-				{
-					line_count_y++;
-					if (line_count_y > 3) {
-						y_judge[y] = 1;
+		for (int x = 0; x < 7; x++) {
+			int num_y = 0;
+			for (int y = 0; y < 7; y++) {
+				if (board[x][y] == turn_count) {
+					num_y++;
+					if (num_y > 3) {
+						return 1;
 					}
 				}
-
-				for(int x = board_x; x <= board_x_max; x++)
-				{
-					if(board[x][y] == turn_count)
-					{
-						line_count_x++;
-						if (line_count_x > 3) {
-							x_judge[x] = 1;
-						}
-					}
+				else {
+					num_y = 0;
 				}
-				line_count_x = 0;
-			}
-			line_count_y = 0;
-		}
-
-		for (int x = board_x; x <= board_x_max; x++){
-			if (x_judge[x] == 1) {
-				int num = 0;
-				for (int y = board_y; y <= board_y_max; y++){
+				int num_x = 0;
+				for (int x = 0; x < 7; x++) {
 					if (board[x][y] == turn_count) {
-						num++;
-						if (num > 3) {
-							return true;
+						num_x++;
+						if (num_x > 3) {
+							return 1;
 						}
-					}else {
-						num = 0;
+					}
+					else {
+						num_x=0;
 					}
 				}
 			}
 		}
 
-	
-		return  0;
+
+
+		return 0;
 
 
 	}
