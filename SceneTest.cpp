@@ -57,6 +57,8 @@ void SceneTest::Input()
 					if (winner != 0) {
 						this->game_ptr->SetWinner(winner);
 						this->game_ptr->ChageScene(3);
+						board_state.Board_reset();
+
 					}
 				}
 			}

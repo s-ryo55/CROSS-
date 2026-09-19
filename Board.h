@@ -32,6 +32,8 @@ public:
 				board[x][y] = 0;
 			}
 		}
+		turn = 1;
+		turn_count = 1;
 	}
 
 	void TurnTurn()

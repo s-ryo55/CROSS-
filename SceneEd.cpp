@@ -35,7 +35,6 @@ void SceneEd::Input()
 	if (this->mouse.IsClickSprite(this->restart[0]) == 1)
 	{
 		this->game_ptr->ChageScene(2);
-		board_state.Bordreset();
 	}
 	if (this->mouse.IsClickSprite(this->title[0]) == 1)
 	{
