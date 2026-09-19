@@ -16,7 +16,7 @@ class SceneEd : public SceneBase
 	Game* game_ptr;
 
 	// 背景クラスのインスタンス
-	Background bg0;
+	Background bg[4];
 
 public:
 	/// <summary>

@@ -6,7 +6,9 @@
 void SceneEd::Init()
 {
 	// ”wŒi‰æ‘œ‚Ì“Çž
-	this->bg0.Load_image("ed.png");
+	for (int i = 1; i < 4; i++) {
+		this->bg[i].Load_image("data/WIN_" + std::to_string(i) + ".png");
+	}
 }
 
 /// <summary>
@@ -14,6 +16,7 @@ void SceneEd::Init()
 /// </summary>
 void SceneEd::Draw()
 {
-	// ”wŒi0‚ð•`‰æ
-	this->bg0.Draw();
+	
+		this->bg[1].Draw();
+	
 }

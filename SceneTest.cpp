@@ -11,7 +11,7 @@ void SceneTest::Init()
 	// ”wŒi‰æ‘œ‚Ì“Çž
 	this->bg0.Load_image("data/ingame.png");
 	this->reverse_select[0].Load_image("data/reverse.png");
-	this->reverse_select[1].Load_image("data/reverse_select_lock.png");
+	this->reverse_select[1].Load_image("data/reverse_lock.png");
 	this->reach_select[0].Load_image("data/reach.png");
 	this->reach_select[1].Load_image("data/reach_lock.png");
 
@@ -31,8 +31,8 @@ void SceneTest::Init()
 	}
 
 	for(int i = 0; i < 2; i++) {
-		this->reverse_select[i].Set_pos(15, 100);
-		this->reach_select[i].Set_pos(150, 100);
+		this->reverse_select[i].Set_pos(700, 200);
+		this->reach_select[i].Set_pos(700, 350);
 	}
 
 	for(int i = 1; i < 4; i++) {
@@ -106,7 +106,9 @@ void SceneTest::Draw()
 			this->text_turn[i].Draw();
 		}
 	}
-
+		this->reverse_select[1].Draw();
+		this->reach_select[1].Draw();
+	
 }
 
 /// <summary>
