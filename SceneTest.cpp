@@ -102,10 +102,9 @@ void SceneTest::Draw()
 			this->text_turn[i].Draw();
 		}
 	}
-	for(int ac = 0; ac < 2; ac++) {
-		this->reverse_select[ac].Draw();
-		this->reach_select[ac].Draw();
-	}
+		this->reverse_select[1].Draw();
+		this->reach_select[1].Draw();
+	
 }
 
 /// <summary>
