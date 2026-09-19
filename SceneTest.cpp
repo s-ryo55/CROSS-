@@ -1,11 +1,6 @@
 #include "SceneTest.h"
 #include "DxLib.h"
 
-
-
-
-
-
 void SceneTest::Init()
 {
 	// 背景画像の読込
@@ -24,9 +19,6 @@ void SceneTest::Init()
 				// スプライトの表示位置を設定
 				this->board_surface[x][y][state].Set_pos(100 + x * 72, 200 + y * 63);
 			}
-
-		
-
 		}
 	}
 
@@ -39,10 +31,7 @@ void SceneTest::Init()
 		this->text_turn[i].Load_image("data/turn_" + std::to_string(i) + ".png");
 		this->text_turn[i].Set_pos(67, 140);
 	}
-
-
 }
-
 
 /// <summary>
 /// 入力処理
@@ -62,8 +51,11 @@ void SceneTest::Input()
 				// クリックされたときの処理
 				if(board_state.SetBoardState(x, y)) { // クリックされた座標の状態を取得
 					board_state.TurnTurn(); // ターンを進める
-					if (board_state.GetBoardStateAroundSelect()) {
-						// 押されていたらテストシーンへ
+
+					// 変更: 勝者IDを受け取り、0でなければ Game に保存してエンディングへ
+					int winner = board_state.GetBoardStateAroundSelect();
+					if (winner != 0) {
+						this->game_ptr->SetWinner(winner);
 						this->game_ptr->ChageScene(3);
 					}
 				}
@@ -84,7 +76,6 @@ void SceneTest::Input()
 void SceneTest::Update()
 {
 	
-
 }
 
 /// <summary>

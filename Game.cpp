@@ -84,6 +84,17 @@ void Game::ChageScene(int arg_scene_no)
 	this->scene_arr[this->scene_no]->Init();
 }
 
+// ’Ç‰Á: ŸÒİ’èEæ“¾‚ÌÀ‘•
+void Game::SetWinner(int w)
+{
+	this->winner = w;
+}
+
+int Game::GetWinner() const
+{
+	return this->winner;
+}
+
 
 
 

@@ -18,8 +18,11 @@ class SceneEd : public SceneBase
 	Background bg[4];
 
 	Board board_state;
+
+	// 追加: 勝者IDを保持
+	int winner = 1;
+
 public:
-	int winner = 0;
 	/// <summary>
 	/// コンストラクター
 	/// </summary>

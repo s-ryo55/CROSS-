@@ -68,42 +68,71 @@ public:
 	
 	int GetBoardStateAroundSelect()
 	{
-		for (int x = 0; x < 7; x++) {
-			int num_y = 0;
-			for (int y = 0; y < 7; y++) {
-				if (board[x][y] == turn_count) {
-					num_y++;
-					if (num_y > 3) {
-						return 1;
-					}
-				}
-				else {
-					num_y = 0;
-				}
-				int num_x = 0;
-				for (int x = 0; x < 7; x++) {
-					if (board[x][y] == turn_count) {
-						num_x++;
-						if (num_x > 3) {
-							return 1;
-						}
-					}
-					else {
-						num_x=0;
-					}
+		int player = turn_count;
+
+		// 水平方向
+		for (int y = 0; y < 7; y++) {
+			int cnt = 0;
+			for (int x = 0; x < 7; x++) {
+				if (board[x][y] == player) {
+					cnt++;
+					if (cnt >= 4) return player;
+				} else {
+					cnt = 0;
 				}
 			}
 		}
 
-		for (int x = 0; x < 4; x++) {
-			int 
+		// 垂直方向
+		for (int x = 0; x < 7; x++) {
+			int cnt = 0;
+			for (int y = 0; y < 7; y++) {
+				if (board[x][y] == player) {
+					cnt++;
+					if (cnt >= 4) return player;
+				} else {
+					cnt = 0;
+				}
+			}
 		}
 
+		// 斜め（右下方向）
+		for (int sx = 0; sx < 7; sx++) {
+			for (int sy = 0; sy < 7; sy++) {
+				int cnt = 0;
+				int x = sx;
+				int y = sy;
+				while (x < 7 && y < 7) {
+					if (board[x][y] == player) {
+						cnt++;
+						if (cnt >= 4) return player;
+					} else {
+						cnt = 0;
+					}
+					x++; y++;
+				}
+			}
+		}
 
+		// 斜め（左下方向）
+		for (int sx = 0; sx < 7; sx++) {
+			for (int sy = 0; sy < 7; sy++) {
+				int cnt = 0;
+				int x = sx;
+				int y = sy;
+				while (x >= 0 && y < 7) {
+					if (board[x][y] == player) {
+						cnt++;
+						if (cnt >= 4) return player;
+					} else {
+						cnt = 0;
+					}
+					x--; y++;
+				}
+			}
+		}
 
 		return 0;
-
-
 	}
 
 

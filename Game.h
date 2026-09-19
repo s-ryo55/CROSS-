@@ -16,6 +16,9 @@ class Game
 	/// </summary>
 	SceneBase* scene_arr[4] = { nullptr, nullptr, nullptr, nullptr };
 
+	// ’Ç‰Á: ŸÒ‚ğ•Û‚·‚é
+	int winner = 1;
+
 public:
 
 	/// <summary>
@@ -33,5 +36,9 @@ public:
 	/// </summary>
 	/// <param name="arg_scene_no">ƒV[ƒ“”Ô†</param>
 	void ChageScene(int arg_scene_no);
+
+	// ’Ç‰Á: ŸÒ‚Ìİ’èEæ“¾
+	void SetWinner(int w);
+	int GetWinner() const;
 };
 

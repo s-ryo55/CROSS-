@@ -7,7 +7,6 @@
 #include "KeyReader.h"		// キーリーダー
 #include "Mouse.h"			// マウス
 #include "Board.h"          // ボードクラス
-#include "SceneEd.h"
 
 /// <summary>
 /// テストシーン（SceneBaseクラスの子クラス）
@@ -34,8 +33,6 @@ class SceneTest : public SceneBase
 	Sprite text_turn[4];
 
 
-
-
 public:
 
 	/// <summary>
@@ -46,8 +43,6 @@ public:
 	{
 		// Gameインスタンスのポインターを保持
 		this->game_ptr = arg_game_ptr;
-
-
 	}
 
 	/// <summary>
