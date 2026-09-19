@@ -57,9 +57,14 @@ public:
 		return board[x][y];
 	}
 
-	void SetBoardState(int x, int y)
+	bool SetBoardState(int x, int y)
 	{
-		board[x][y] = turn;
+		if(board[x][y] == 0)
+		{
+			board[x][y] = turn;
+			return true;
+		}
+		return false;
 	}
 
 	void SetBoardState(int x, int y, int state)
