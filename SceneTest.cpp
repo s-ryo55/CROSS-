@@ -62,6 +62,10 @@ void SceneTest::Input()
 				// クリックされたときの処理
 				if(board_state.SetBoardState(x, y)) { // クリックされた座標の状態を取得
 					board_state.TurnTurn(); // ターンを進める
+					if (board_state.GetBoardStateAroundSelect()) {
+						// 押されていたらテストシーンへ
+						this->game_ptr->ChageScene(3);
+					}
 				}
 			}
 
