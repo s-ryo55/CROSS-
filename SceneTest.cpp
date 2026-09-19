@@ -46,7 +46,7 @@ void SceneTest::Input()
 		for (int y = 0; y < 7; y++) {
 			
 
-			if (this->mouse.IsClickSprite(this->board_surface[x][y][0]) ==1)
+			if (this->mouse.IsClickSpriteOnce(this->board_surface[x][y][0]) ==1)
 			{
 				// クリックされたときの処理
 				if(board_state.SetBoardState(x, y)) { // クリックされた座標の状態を取得
