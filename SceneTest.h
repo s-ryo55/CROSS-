@@ -21,7 +21,8 @@ class SceneTest : public SceneBase
 	// 背景クラスのインスタンス
 	Background bg0;
 
-	Sprite board_surface[7][7][5];
+	// 変更: 状態数を拡張 (0..6) => 7 枚
+	Sprite board_surface[7][7][7];
 
 	Board board_state;
 

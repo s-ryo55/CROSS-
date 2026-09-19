@@ -12,7 +12,7 @@ void SceneTest::Init()
 
 	for(int x = 0; x <7; x++){
 		for(int y = 0; y < 7; y++){
-			for(int state = 0; state < 5; state++)
+			for(int state = 0; state < 7; state++) // 0..6 をロード
 			{
 				// スプライトの初期化
 				this->board_surface[x][y][state].Load_image("data/board_" + std::to_string(state) + ".png");
@@ -46,26 +46,26 @@ void SceneTest::Input()
 		for (int y = 0; y < 7; y++) {
 			
 
-			if (this->mouse.IsClickSpriteOnce(this->board_surface[x][y][0]) ==1)
+			if (this->mouse.IsClickSprite(this->board_surface[x][y][0]) ==1)
 			{
 				// クリックされたときの処理
 				if(board_state.SetBoardState(x, y)) { // クリックされた座標の状態を取得
 					board_state.TurnTurn(); // ターンを進める
 
-					// 変更: 勝者IDを受け取り、0でなければ Game に保存してエンディングへ
+					// 勝者判定
 					int winner = board_state.GetBoardStateAroundSelect();
 					if (winner != 0) {
 						this->game_ptr->SetWinner(winner);
 						this->game_ptr->ChageScene(3);
-						board_state.Board_reset();
-
+						 board_state.Board_reset(); // 存在しない場合は削除 or 実装を追加してください
 					}
 				}
 			}
 
 			if (this->mouse.IsClickSprite(this->board_surface[x][y][0]) == 2 && board_state.GetSelect() == false && board_state.GetBoardState(x,y) == 0)
 			{
-				board_state.SetBoardState(x, y, 4);
+				// 変更: 現在ターンに応じた選択状態を設定
+				board_state.SetSelectAt(x, y);
 				board_state.SetSelect(true);
 			}
 		}
@@ -89,7 +89,7 @@ void SceneTest::Draw()
 	this->bg0.Draw();
 	for (int x = 0; x < 7; x++) {
 		for (int y = 0; y < 7; y++) {
-				this->board_surface[x][y][board_state.GetBoardState(x, y)].Draw();
+			this->board_surface[x][y][board_state.GetBoardState(x, y)].Draw();
 		}
 	}
 
@@ -122,5 +122,6 @@ void SceneTest::Select_tekki_dir(int arg_dir)
 	
 	
 }
+
 
 
