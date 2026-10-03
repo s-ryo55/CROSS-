@@ -36,6 +36,9 @@ class SceneTest : public SceneBase
 	// 追加: リバース操作モードフラグ（リバースボタンを押してからターゲットを選ぶ）
 	bool reverse_mode = false;
 
+	// 事前にリーチボタンを押したか (押したらリーチを作る場所にしか置けない)
+	bool reach_intent = false;
+
 	// 追加: 現在宣言可能なリーチ（石を置いたプレイヤーID）。0=なし
 	int reach_available_for = 0;
 

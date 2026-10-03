@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <utility>
 
 class Board
 {
@@ -313,5 +314,31 @@ public:
 		reach_player = 0;
 		reverse_available_for = 0;
 		return true;
+	}
+
+	// --- 追加: ある座標に置くと「リーチ状態」を作るか（シミュレーション判定） ---
+	bool IsReachCreatingMove(int x, int y, int player)
+	{
+		if (x < 0 || x >= 7 || y < 0 || y >= 7) return false;
+		if (board[x][y] != STATE_EMPTY) return false;
+		int backup = board[x][y];
+		board[x][y] = player;
+		bool reach = CheckReach(player);
+		board[x][y] = backup;
+		return reach;
+	}
+
+	// 指定プレイヤーがリーチを作れる座標一覧を返す
+	std::vector<std::pair<int,int>> GetReachTargets(int player)
+	{
+		std::vector<std::pair<int,int>> res;
+		for (int x = 0; x < 7; x++) {
+			for (int y = 0; y < 7; y++) {
+				if (IsReachCreatingMove(x, y, player)) {
+					res.emplace_back(x, y);
+				}
+			}
+		}
+		return res;
 	}
 };
