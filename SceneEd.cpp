@@ -9,7 +9,7 @@ void SceneEd::Init()
 	this->winner = this->game_ptr->GetWinner();
 
 	// ”wŒi‰æ‘œ‚Ì“Ç
-	for (int i = 1; i < 4; i++) {
+	for (int i = 1; i < 5; i++) {
 		this->bg[i].Load_image("data/WIN_" + std::to_string(i) + ".png");
 	}
 
