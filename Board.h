@@ -19,6 +19,16 @@ class Board
 	int reverse_available_for = 0;       // リバース権限があるプレイヤー (1..3)
 	int reverse_remaining = 5;           // 残りリバース回数（合計で5回まで）
 
+	// 追加: リーチを作った直近の置き位置（互換性で保持するが、リバース対象は履歴参照で決定）
+	int reach_target_x = -1;
+	int reach_target_y = -1;
+
+	// 追加: 直近 3 手の履歴を保持（SetBoardState 成功時に記録）
+	struct MoveEntry { int player; int x; int y; };
+	MoveEntry move_history[3];
+	int history_index = 0;   // 次に書き込む位置（循環）
+	int history_count = 0;   // 実際に記録されたエントリ数（<=3）
+
 public:
 	// 状態定義
 	// 0 = empty, 1..3 = 所有プレイヤー、4..6 = 各ターンの選択表示
@@ -46,6 +56,11 @@ public:
 		reach_player = 0;
 		reverse_available_for = 0;
 		reverse_remaining = 5;
+		reach_target_x = -1;
+		reach_target_y = -1;
+		history_index = 0;
+		history_count = 0;
+		for (int i = 0; i < 3; ++i) move_history[i] = {0, -1, -1};
 	}
 
 	int Draw_judge()
@@ -249,6 +264,7 @@ public:
 		return board[x][y];
 	}
 
+	// SetBoardState に履歴記録を追加
 	bool SetBoardState(int x, int y)
 	{
 		if(board[x][y] == STATE_EMPTY)
@@ -256,6 +272,10 @@ public:
 			board[x][y] = turn;
 			select_x = x;
 			select_y = y;
+			// 履歴に記録 (記録は turn の値を使用)
+			move_history[history_index] = { turn, x, y };
+			history_index = (history_index + 1) % 3;
+			if (history_count < 3) history_count++;
 			return true;
 		}
 		return false;
@@ -270,10 +290,20 @@ public:
 	// リーチ宣言（player がリーチになったときに呼ぶ）
 	void DeclareReach(int player)
 	{
+		// 互換性のため既存実装は select_x/select_y を使用
+		DeclareReachWithTarget(player, select_x, select_y);
+	}
+
+	// 新規: 座標を指定してリーチ宣言（Scene 側のキュー活用時に使用）
+	void DeclareReachWithTarget(int player, int x, int y)
+	{
 		reach_declared = true;
 		reach_player = player;
-		// リーチから2番目の人にリバース権限を付与
-		reverse_available_for = ((player + 1) % 3) + 1; // 1..3 のローテーション
+		// リーチした「2ターン後の人」にリバース権限を付与する
+		reverse_available_for = ((player + 1) % 3) + 1; // player=1->3,2->1,3->2 (2ターン後)
+		// 指定ターゲットを保存（互換性）
+		reach_target_x = x;
+		reach_target_y = y;
 	}
 
 	bool IsReachDeclared() const { return reach_declared; }
@@ -287,12 +317,26 @@ public:
 		return reach_declared && reverse_remaining > 0 && reverse_available_for == player;
 	}
 
+	// ヘルパー: 過去の手を取得 (rel = 1: 直前、2: 2手前, ...)
+	std::pair<int,int> GetMoveRelative(int rel) const
+	{
+		if (rel <= 0 || rel > history_count) return { -1, -1 };
+		int idx = history_index - rel;
+		while (idx < 0) idx += 3;
+		const MoveEntry& m = move_history[idx % 3];
+		return { m.x, m.y };
+	}
+
 	// リバースを試行する。条件を満たさない場合は false を返す。
+	// リバースは「2手前の置きマス」のみを操作可能にする（要求に基づき変更）。
 	// リバースによって即時勝利（flip後に actor が4連）が発生する場合は実行しない（false）。
 	// 成功したら true を返し、reverse_remaining を減らし、リーチは解除する。
 	bool UseReverse(int x, int y, int actorPlayer)
 	{
 		if (x < 0 || x >= 7 || y < 0 || y >= 7) return false;
+		// 対象は「2手前のマス」のみ許可する
+		auto two = GetMoveRelative(2);
+		if (two.first != x || two.second != y) return false;
 		if (!CanUseReverseForPlayer(actorPlayer)) return false;
 		int current = board[x][y];
 		if (current == STATE_EMPTY) return false;          // 空セルは対象外
@@ -313,6 +357,42 @@ public:
 		reach_declared = false;
 		reach_player = 0;
 		reverse_available_for = 0;
+		// 対象リーチセルはクリア
+		reach_target_x = -1;
+		reach_target_y = -1;
+		return true;
+	}
+
+	// 新規: Scene から「内部の CanUseReverse 判定をバイパスして強制的に UseReverse を試みる」
+	// ただし強制でも対象マスは 2手前に限定する。
+	bool UseReverseForce(int x, int y, int actorPlayer)
+	{
+		if (x < 0 || x >= 7 || y < 0 || y >= 7) return false;
+		if (reverse_remaining <= 0) return false;
+		// 強制でも対象は 2手前のみ
+		auto two = GetMoveRelative(2);
+		if (two.first != x || two.second != y) return false;
+
+		int current = board[x][y];
+		if (current == STATE_EMPTY) return false;
+		if (current == actorPlayer) return false;
+		// 仮に置き換えてみて勝利を招く場合は拒否
+		int backup = board[x][y];
+		board[x][y] = actorPlayer;
+		bool wouldWin = CheckWinForPlayer(actorPlayer);
+		if (wouldWin) {
+			board[x][y] = backup;
+			return false;
+		}
+		// 実行
+		// board[x][y] = actorPlayer; // already set
+		reverse_remaining--;
+		// リーチ関連フラグはクリア（UseReverse と同様）
+		reach_declared = false;
+		reach_player = 0;
+		reverse_available_for = 0;
+		reach_target_x = -1;
+		reach_target_y = -1;
 		return true;
 	}
 

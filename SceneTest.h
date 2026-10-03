@@ -8,6 +8,8 @@
 #include "Mouse.h"			// マウス
 #include "Board.h"          // ボードクラス
 
+#include <deque>
+
 /// <summary>
 /// テストシーン（SceneBaseクラスの子クラス）
 /// </summary>
@@ -21,26 +23,30 @@ class SceneTest : public SceneBase
 	// 背景クラスのインスタンス
 	Background bg0;
 
-	// 変更: 状態数を拡張 (0..6) => 7 枚
+	// 状態数を拡張 (0..6) => 7 枚
 	Sprite board_surface[7][7][7];
 
 	Board board_state;
 
 	Mouse mouse;
 
-	Sprite reverse_select[2];
+	Sprite reverse_select[3];
 	Sprite reach_select[2];
 
 	Sprite text_turn[4];
 
-	// 追加: リバース操作モードフラグ（リバースボタンを押してからターゲットを選ぶ）
+	// リバース選択モード
 	bool reverse_mode = false;
 
-	// 事前にリーチボタンを押したか (押したらリーチを作る場所にしか置けない)
-	bool reach_intent = false;
-
-	// 追加: 現在宣言可能なリーチ（石を置いたプレイヤーID）。0=なし
+	// 直前のリーチ宣言待ちアクティブ（0 = なし）
 	int reach_available_for = 0;
+
+	// 複数リーチ候補を順に処理するキュー
+	std::deque<int> reach_queue;
+
+	// 各プレイヤーごとの判定フラグ（index 1..3 を使用）
+	bool reach_possible[4] = { false, false, false, false };     // 指定プレイヤーが今打てばリーチになるか
+	bool reverse_allowed[4] = { false, false, false, false };     // 指定プレイヤーがリバースを行えるか（Scene 側判定）
 
 	// ターン表示アニメーション用カウンタ（サイン波で上下させる）
 	int turn_anim_tick = 0;
@@ -87,5 +93,8 @@ public:
 	/// </summary>
 	/// <param name="arg_dir">敵機方向</param>
 	void Select_tekki_dir(int arg_dir);
+
+	// Scene 内で使用するヘルパー（SceneTest.cpp 側実装）
+	void UpdatePlayerFlags(); // 各プレイヤーの reach_possible / reverse_allowed を更新
 
 };
