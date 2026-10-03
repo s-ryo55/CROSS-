@@ -127,7 +127,7 @@ void SceneTest::Input()
 								this->reach_available_for = 0;
 							}
 						}
-						}
+						
 					}
 				}
 
