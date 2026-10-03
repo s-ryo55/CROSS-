@@ -4,9 +4,7 @@
 #include <algorithm> // for std::find
 
 // 変更点（要点）
-// - SceneTest::UpdatePlayerFlags を追加し、各プレイヤーごとのリーチ／リバース可否を更新する。
-// - Input / Draw で board_state の直接呼び出しではなく reach_possible / reverse_allowed 配列を使用するように変更。
-// - 既存の reach_queue / reach_available_for ロジックは維持しつつ、配列判定と連携するよう調整。
+// - SceneTest::UpdatePlayerFlags を Board::CanUseReverseForPlayer の結果のみ使うよう修正（UI と実行権限を一致させる）
 
 void SceneTest::Init()
 {
@@ -82,11 +80,8 @@ void SceneTest::UpdatePlayerFlags()
 {
 	for (int p = 1; p <= 3; p++) {
 		this->reach_possible[p] = this->board_state.CheckReach(p);
-		// 基本は Board 側の権限を尊重するが、現在のターンのプレイヤーは
-		// UI 操作のため reverse を一時的に許可する（必要に応じてロジックを調整）
-		bool canUseFromBoard = this->board_state.CanUseReverseForPlayer(p);
-		bool isCurrentTurn = (this->board_state.GetTurn() == p);
-		this->reverse_allowed[p] = canUseFromBoard || (isCurrentTurn && this->board_state.GetReverseRemaining() > 0);
+		// Board の権限に厳密に従う（現在ターン OR をしない）
+		this->reverse_allowed[p] = this->board_state.CanUseReverseForPlayer(p);
 	}
 }
 

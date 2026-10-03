@@ -19,7 +19,10 @@ class Board
 	int reverse_available_for = 0;       // リバース権限があるプレイヤー (1..3)
 	int reverse_remaining = 5;           // 残りリバース回数（合計で5回まで）
 
-	// 追加: リーチを作った直近の置き位置（互換性で保持するが、リバース対象は履歴参照で決定）
+	// 追加: そのリーチに紐づく「リーチ対象座標」集合（宣言時に算出）
+	std::vector<std::pair<int,int>> reach_targets;
+
+	// 追加: リーチを作った直近の置き位置（互換性で保持）
 	int reach_target_x = -1;
 	int reach_target_y = -1;
 
@@ -58,6 +61,7 @@ public:
 		reverse_remaining = 5;
 		reach_target_x = -1;
 		reach_target_y = -1;
+		reach_targets.clear();
 		history_index = 0;
 		history_count = 0;
 		for (int i = 0; i < 3; ++i) move_history[i] = {0, -1, -1};
@@ -304,6 +308,9 @@ public:
 		// 指定ターゲットを保存（互換性）
 		reach_target_x = x;
 		reach_target_y = y;
+
+		// reach_targets を計算して保存する（ルール2-b: 宣言時の reach_targets の座標群のみが後で反転対象になりうる）
+		reach_targets = GetReachTargets(player);
 	}
 
 	bool IsReachDeclared() const { return reach_declared; }
@@ -327,20 +334,38 @@ public:
 		return { m.x, m.y };
 	}
 
+	// ヘルパー: 指定座標が現在 reach_targets に含まれるか
+	bool IsInReachTargets(int x, int y) const
+	{
+		// まず宣言時に保存した reach_target（宣言者が直前に置いたマス）を許可
+		if (x == reach_target_x && y == reach_target_y) return true;
+
+		for (const auto &p : reach_targets) {
+			if (p.first == x && p.second == y) return true;
+		}
+		return false;
+	}
+
 	// リバースを試行する。条件を満たさない場合は false を返す。
-	// リバースは「2手前の置きマス」のみを操作可能にする（要求に基づき変更）。
+	// ルール2-b: "宣言時に算出された reach_targets の座標のうち、現在その座標に置かれている石のみ反転可能"
+	// またリバースは権限保持者のみが行える（CanUseReverseForPlayer を満たすこと）。
 	// リバースによって即時勝利（flip後に actor が4連）が発生する場合は実行しない（false）。
 	// 成功したら true を返し、reverse_remaining を減らし、リーチは解除する。
 	bool UseReverse(int x, int y, int actorPlayer)
 	{
 		if (x < 0 || x >= 7 || y < 0 || y >= 7) return false;
-		// 対象は「2手前のマス」のみ許可する
-		auto two = GetMoveRelative(2);
-		if (two.first != x || two.second != y) return false;
+
+		// 対象は宣言時に算出された reach_targets のみ（かつ宣言者直置きマスも許可）
+		if (!IsInReachTargets(x, y)) return false;
+
 		if (!CanUseReverseForPlayer(actorPlayer)) return false;
+
 		int current = board[x][y];
-		if (current == STATE_EMPTY) return false;          // 空セルは対象外
-		if (current == actorPlayer) return false;         // 自分の石をひっくり返す意味なし
+		// 現在その座標に石が置かれていることが必須（空セルは不可)
+		if (current == STATE_EMPTY) return false;
+		// actor 自身の石は反転不可
+		if (current == actorPlayer) return false;
+
 		// シミュレーションして即勝利を防ぐ
 		int backup = board[x][y];
 		board[x][y] = actorPlayer;
@@ -350,28 +375,28 @@ public:
 			board[x][y] = backup;
 			return false;
 		}
-		// 実行
-		// board[x][y] = actorPlayer; // already set
+
+		// 実行（既に上書き済み)
 		reverse_remaining--;
-		// リーチは解除（リバース行使で局面が変わるため）
+		// リーチは解除（リバース行使で局面が変わるため)
 		reach_declared = false;
 		reach_player = 0;
 		reverse_available_for = 0;
-		// 対象リーチセルはクリア
+		// reach_targets をクリア
+		reach_targets.clear();
 		reach_target_x = -1;
 		reach_target_y = -1;
 		return true;
 	}
 
 	// 新規: Scene から「内部の CanUseReverse 判定をバイパスして強制的に UseReverse を試みる」
-	// ただし強制でも対象マスは 2手前に限定する。
+	// ただし強制でも対象マスは reach_targets に限定する。
 	bool UseReverseForce(int x, int y, int actorPlayer)
 	{
 		if (x < 0 || x >= 7 || y < 0 || y >= 7) return false;
 		if (reverse_remaining <= 0) return false;
-		// 強制でも対象は 2手前のみ
-		auto two = GetMoveRelative(2);
-		if (two.first != x || two.second != y) return false;
+		// 強制でも対象は reach_targets のみ（かつ宣言者直置きマスも許可）
+		if (!IsInReachTargets(x, y)) return false;
 
 		int current = board[x][y];
 		if (current == STATE_EMPTY) return false;
@@ -385,12 +410,12 @@ public:
 			return false;
 		}
 		// 実行
-		// board[x][y] = actorPlayer; // already set
 		reverse_remaining--;
 		// リーチ関連フラグはクリア（UseReverse と同様）
 		reach_declared = false;
 		reach_player = 0;
 		reverse_available_for = 0;
+		reach_targets.clear();
 		reach_target_x = -1;
 		reach_target_y = -1;
 		return true;
@@ -411,11 +436,83 @@ public:
 	// 指定プレイヤーがリーチを作れる座標一覧を返す
 	std::vector<std::pair<int,int>> GetReachTargets(int player)
 	{
+		// 変更: リーチ成立区間の「既に置かれている3つのマス（player の石）」を返す
 		std::vector<std::pair<int,int>> res;
+		auto addIfNotExist = [&](int ax, int ay) {
+			for (const auto &p : res) {
+				if (p.first == ax && p.second == ay) return;
+			}
+			res.emplace_back(ax, ay);
+		};
+
+		// 水平区間
+		for (int y = 0; y < 7; y++) {
+			for (int sx = 0; sx <= 7 - 4; sx++) {
+				int cntPlayer = 0, cntEmpty = 0;
+				for (int k = 0; k < 4; k++) {
+					int v = board[sx + k][y];
+					if (v == player) cntPlayer++;
+					else if (v == STATE_EMPTY) cntEmpty++;
+				}
+				if (cntPlayer == 3 && cntEmpty == 1) {
+					for (int k = 0; k < 4; k++) {
+						int v = board[sx + k][y];
+						if (v == player) addIfNotExist(sx + k, y);
+					}
+				}
+			}
+		}
+
+		// 垂直区間
 		for (int x = 0; x < 7; x++) {
-			for (int y = 0; y < 7; y++) {
-				if (IsReachCreatingMove(x, y, player)) {
-					res.emplace_back(x, y);
+			for (int sy = 0; sy <= 7 - 4; sy++) {
+				int cntPlayer = 0, cntEmpty = 0;
+				for (int k = 0; k < 4; k++) {
+					int v = board[x][sy + k];
+					if (v == player) cntPlayer++;
+					else if (v == STATE_EMPTY) cntEmpty++;
+				}
+				if (cntPlayer == 3 && cntEmpty == 1) {
+					for (int k = 0; k < 4; k++) {
+						int v = board[x][sy + k];
+						if (v == player) addIfNotExist(x, sy + k);
+					}
+				}
+			}
+		}
+
+		// 斜め右下区間
+		for (int sx = 0; sx <= 7 - 4; sx++) {
+			for (int sy = 0; sy <= 7 - 4; sy++) {
+				int cntPlayer = 0, cntEmpty = 0;
+				for (int k = 0; k < 4; k++) {
+					int v = board[sx + k][sy + k];
+					if (v == player) cntPlayer++;
+					else if (v == STATE_EMPTY) cntEmpty++;
+				}
+				if (cntPlayer == 3 && cntEmpty == 1) {
+					for (int k = 0; k < 4; k++) {
+						int v = board[sx + k][sy + k];
+						if (v == player) addIfNotExist(sx + k, sy + k);
+					}
+				}
+			}
+		}
+
+		// 斜め左下区間
+		for (int sx = 3; sx < 7; sx++) {
+			for (int sy = 0; sy <= 7 - 4; sy++) {
+				int cntPlayer = 0, cntEmpty = 0;
+				for (int k = 0; k < 4; k++) {
+					int v = board[sx - k][sy + k];
+					if (v == player) cntPlayer++;
+					else if (v == STATE_EMPTY) cntEmpty++;
+				}
+				if (cntPlayer == 3 && cntEmpty == 1) {
+					for (int k = 0; k < 4; k++) {
+						int v = board[sx - k][sy + k];
+						if (v == player) addIfNotExist(sx - k, sy + k);
+					}
 				}
 			}
 		}
