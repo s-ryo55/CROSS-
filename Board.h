@@ -518,4 +518,18 @@ public:
 		}
 		return res;
 	}
+
+	// 追加: リーチを外部からキャンセルする（リバース以外で潰れたときに呼ぶ）
+	void CancelReach()
+	{
+		reach_declared = false;
+		reach_player = 0;
+		reverse_available_for = 0;
+		reach_targets.clear();
+		reach_target_x = -1;
+		reach_target_y = -1;
+	}
+
+	// --- 既存メソッド以下はそのまま ---
+	// (以降の実装は既にあるものを維持)
 };

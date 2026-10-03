@@ -284,6 +284,19 @@ void SceneTest::Input()
 				{
 					// クリックされたときの処理
 					if (board_state.SetBoardState(x, y)) { // クリックされた座標の状態を取得
+
+						// 追加: 既に宣言されているリーチが他の手で潰れていないか検査
+						if (this->board_state.IsReachDeclared()) {
+							int declaredPlayer = this->board_state.GetReachPlayer();
+							// 宣言が存在するが、盤面上でそのプレイヤーのリーチが成り立たなくなっていたらキャンセル
+							if (!this->board_state.CheckReach(declaredPlayer)) {
+								this->board_state.CancelReach();
+								this->reach_available_for = 0;
+								// フラグ再計算（UI 反映のため）
+								UpdatePlayerFlags();
+							}
+						}
+
 						// ここで「置いたとき」の勝利判定を必ず行う（TurnTurn の前）
 						if (this->board_state.CheckWinForPlayer(currentPlayer)) {
 							this->game_ptr->SetWinner(currentPlayer);
