@@ -67,10 +67,11 @@ void SceneEd::Sound_play()
 /// </summary>
 void SceneEd::Draw()
 {
-	// winner ‚É‘Î‰ž‚·‚é”wŒi‚ð•`‰æi”z—ñ‚Í 1..3 ‚ð‘z’èj
-	if (this->winner >= 1 && this->winner <= 3) {
+	// winner ‚É‘Î‰ž‚·‚é”wŒi‚ð•`‰æi”z—ñ‚Í 1..4 ‚ð‘z’èj
+	if (this->winner >= 1 && this->winner <= 4) {
 		this->bg[this->winner].Draw();
 	}
+	
 	for (int i = 0; i < 2; i++) {
 		if (this->mouse.IsClickSprite(this->restart[0]) == 2) {
 			this->restart[1].Draw();
