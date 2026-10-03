@@ -1,19 +1,18 @@
 #include "SceneTest.h"
 #include "DxLib.h"
 #include <cmath>
-
 void SceneTest::Init()
 {
 	// 背景画像の読込
 	this->bg0.Load_image("data/ingame.png");
-	this->reverse_select[0].Load_image("data/reverse.png");
+	this->reverse_select[0].Load_image("data/reverse_select.png");
 	this->reverse_select[1].Load_image("data/reverse_lock.png");
-	this->reach_select[0].Load_image("data/reach.png");
+	this->reach_select[0].Load_image("data/reach_select.png");
 	this->reach_select[1].Load_image("data/reach_lock.png");
 
-	for(int x = 0; x <7; x++){
-		for(int y = 0; y < 7; y++){
-			for(int state = 0; state < 7; state++)
+	for (int x = 0; x < 7; x++) {
+		for (int y = 0; y < 7; y++) {
+			for (int state = 0; state < 7; state++)
 			{
 				// スプライトの初期化
 				this->board_surface[x][y][state].Load_image("data/board_" + std::to_string(state) + ".png");
@@ -23,12 +22,12 @@ void SceneTest::Init()
 		}
 	}
 
-	for(int i = 0; i < 2; i++) {
+	for (int i = 0; i < 2; i++) {
 		this->reverse_select[i].Set_pos(700, 200);
 		this->reach_select[i].Set_pos(700, 350);
 	}
 
-	for(int i = 1; i < 4; i++) {
+	for (int i = 1; i < 4; i++) {
 		this->text_turn[i].Load_image("data/turn_" + std::to_string(i) + ".png");
 		this->text_turn[i].Set_pos(67, 140);
 	}
@@ -36,12 +35,11 @@ void SceneTest::Init()
 	// 初期値
 	this->reverse_mode = false;
 	this->reach_available_for = 0;
-	this->reach_intent = false;
 }
 
-///// <summary>
-///// 入力処理
-///// </summary>
+/// <summary>
+/// 入力処理
+/// </summary>
 void SceneTest::Input()
 {
 	mouse.Read(); // マウスの状態を取得
@@ -55,27 +53,22 @@ void SceneTest::Input()
 	{
 		if (this->board_state.CanUseReverseForPlayer(currentPlayer)) {
 			this->reverse_mode = !this->reverse_mode;
-		} else {
+		}
+		else {
 			this->reverse_mode = false;
 		}
 	}
 
 	// リーチボタンの押下チェック
-	// - 既に「リーチ候補」がある場合は（従来どおり）宣言処理を行う
-	// - そうでない場合は「事前リーチモード」のトグルに使う（押したらリーチを作る場所にしか置けない）
+	// reach_available_for が 0 でなければ、そのプレイヤーのリーチ宣言が可能とする
 	if (this->mouse.IsClickSprite(this->reach_select[0]) == 1)
 	{
 		if (this->reach_available_for != 0) {
-			// 宣言処理（候補がセットされている場合）
+			// 宣言処理
 			this->board_state.DeclareReach(this->reach_available_for);
-			// 宣言済みにする（UIは別途）
+			// 宣言済みにする
 			this->reach_available_for = 0;
-			// 事前モードは解除しておく
-			this->reach_intent = false;
-		}
-		else {
-			// 候補が無い場合は「事前リーチモード」のトグル
-			this->reach_intent = !this->reach_intent;
+			// 必要ならサウンドや UI をここで鳴らす
 		}
 	}
 
@@ -83,7 +76,7 @@ void SceneTest::Input()
 	board_state.ResetSelect(); // 選択状態をリセット
 	for (int x = 0; x < 7; x++) {
 		for (int y = 0; y < 7; y++) {
-			
+
 			// リバースモード時はターゲットを選んだらリバースを試行
 			if (this->reverse_mode && this->mouse.IsClickSpriteOnce(this->board_surface[x][y][0]) == 1)
 			{
@@ -99,65 +92,48 @@ void SceneTest::Input()
 			else
 			{
 				// 通常の置く操作（左クリック想定）
-				if (this->mouse.IsClickSpriteOnce(this->board_surface[x][y][0]) ==1)
+				if (this->mouse.IsClickSpriteOnce(this->board_surface[x][y][0]) == 1)
 				{
 					// クリックされたときの処理
-					// 新ルール: 事前リーチモード( reach_intent ) によって配置可能な座標を制限する
-					bool isReachCreating = this->board_state.IsReachCreatingMove(x, y, currentPlayer);
+					if (board_state.SetBoardState(x, y)) { // クリックされた座標の状態を取得
+						board_state.TurnTurn(); // ターンを進める
 
-					// 事前リーチモードがOFFなら「リーチを作る手」は置けない
-					if (!this->reach_intent && isReachCreating) {
-						// 無視（必要なら効果音／メッセージ）
-					}
-					// 事前リーチモードがONなら「リーチを作らない手」は置けない
-					else if (this->reach_intent && !isReachCreating) {
-						// 無視
-					}
-					else
-					{
-						// 許可された手なので従来通り設置処理
-						if(board_state.SetBoardState(x, y)) { // クリックされた座標の状態を取得
-							// 置いたら事前モードは解除
-							this->reach_intent = false;
-
-							board_state.TurnTurn(); // ターンを進める
-
-							// 勝者チェック
-							int winner = board_state.GetBoardStateAroundSelect();
-							if (winner != 0) {
-								this->game_ptr->SetWinner(winner);
+						// 勝者チェック
+						int winner = board_state.GetBoardStateAroundSelect();
+						if (winner != 0) {
+							this->game_ptr->SetWinner(winner);
+							this->game_ptr->ChageScene(3);
+							board_state.Board_reset();
+							// リーチ候補はクリア
+							this->reach_available_for = 0;
+						}
+						else {
+							if (this->board_state.Draw_judge()) {
+								this->game_ptr->SetWinner(4); // 引き分け
 								this->game_ptr->ChageScene(3);
 								board_state.Board_reset();
 								// リーチ候補はクリア
 								this->reach_available_for = 0;
 							}
-							else {
-								if (this->board_state.Draw_judge()) {
-									this->game_ptr->SetWinner(4); // 引き分け
-									this->game_ptr->ChageScene(3);
-									board_state.Board_reset();
-									// リーチ候補はクリア
-									this->reach_available_for = 0;
-								}
-								// 勝者がいなければリーチ判定（直前に打ったプレイヤー = turn_count）
-								int lastPlayer = board_state.GetTurn_count();
+							// 勝者がいなければリーチ判定（直前に打ったプレイヤー = turn_count）
+							int lastPlayer = board_state.GetTurn_count();
 
-								if (board_state.CheckReach(lastPlayer)) {
-									// 自動宣言ではなく「宣言可能」にする（ボタンで宣言させる）
-									this->reach_available_for = lastPlayer;
-									// この時点で reach_select[0] を有効画像にして押せるようにする
-								}
-								else {
-									// リーチでなければ候補をクリア
-									this->reach_available_for = 0;
-								}
+							if (board_state.CheckReach(lastPlayer)) {
+								// 自動宣言ではなく「宣言可能」にする（ボタンで宣言させる）
+								this->reach_available_for = lastPlayer;
+								// この時点で reach_select[0] を有効画像にして押せるようにする
+							}
+							else {
+								// リーチでなければ候補をクリア
+								this->reach_available_for = 0;
 							}
 						}
+
 					}
 				}
 
 				// 右クリック等の選択（既存挙動）
-				if (this->mouse.IsClickSprite(this->board_surface[x][y][0]) == 2 && board_state.GetSelect() == false && board_state.GetBoardState(x,y) == 0)
+				if (this->mouse.IsClickSprite(this->board_surface[x][y][0]) == 2 && board_state.GetSelect() == false && board_state.GetBoardState(x, y) == 0)
 				{
 					// 選択状態を現在のターンに合わせて設定
 					board_state.SetSelectAt(x, y);
@@ -209,7 +185,8 @@ void SceneTest::Draw()
 	bool reverseEnabled = this->board_state.CanUseReverseForPlayer(currentPlayer);
 	if (reverseEnabled) {
 		this->reverse_select[0].Draw(); // 有効画像
-	} else {
+	}
+	else {
 		this->reverse_select[1].Draw(); // ロック画像
 	}
 
@@ -225,7 +202,8 @@ void SceneTest::Draw()
 	// reach_select: reach_available_for がセットされていれば有効にする
 	if (this->reach_available_for != 0) {
 		this->reach_select[0].Draw(); // 有効画像
-	} else {
+	}
+	else {
 		this->reach_select[1].Draw(); // ロック画像
 	}
 
@@ -246,13 +224,9 @@ void SceneTest::Sound_play()
 /// <param name="arg_dir">敵機方向</param>
 void SceneTest::Select_tekki_dir(int arg_dir)
 {
-	
-	
+
+
 }
-
-
-
-
 
 
 
