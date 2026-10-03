@@ -39,6 +39,9 @@ class SceneTest : public SceneBase
 	// 追加: 現在宣言可能なリーチ（石を置いたプレイヤーID）。0=なし
 	int reach_available_for = 0;
 
+	// ターン表示アニメーション用カウンタ（サイン波で上下させる）
+	int turn_anim_tick = 0;
+
 public:
 
 	/// <summary>

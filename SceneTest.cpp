@@ -1,5 +1,6 @@
 #include "SceneTest.h"
 #include "DxLib.h"
+#include <cmath>
 
 void SceneTest::Init()
 {
@@ -148,7 +149,8 @@ void SceneTest::Input()
 /// </summary>
 void SceneTest::Update()
 {
-	
+	// アニメーション用カウンタを進める（オーバーフロー気にせず増加）
+	this->turn_anim_tick++;
 }
 
 /// <summary>
@@ -164,10 +166,17 @@ void SceneTest::Draw()
 		}
 	}
 
-	// ターン表示
-	for(int i = 1; i < 4; i++) {
-		if(board_state.GetTurn() == i) {
+	// ターン表示（アニメーション付き）
+	for (int i = 1; i < 4; i++) {
+		if (board_state.GetTurn() == i) {
+			// サイン波で上下させる（ピクセル単位）
+			const float speed = 0.12f; // 小さくするとゆっくり、値は実験して調整
+			const int amplitude = 6;   // 振幅（ピクセル）
+			int offset = static_cast<int>(std::sin(this->turn_anim_tick * speed) * amplitude);
+			// 一時的に移動して描画し、元の位置に戻す
+			this->text_turn[i].Move(0, offset);
 			this->text_turn[i].Draw();
+			this->text_turn[i].Move(0, -offset);
 		}
 	}
 
@@ -178,6 +187,15 @@ void SceneTest::Draw()
 		this->reverse_select[0].Draw(); // 有効画像
 	} else {
 		this->reverse_select[1].Draw(); // ロック画像
+	}
+
+	// リバース残回数を表示
+	{
+		int reverseRemaining = this->board_state.GetReverseRemaining();
+		// reverseボタン右側に表示（白色）
+		int textX = this->reverse_select[0].Get_pos_x() + 80;
+		int textY = this->reverse_select[0].Get_pos_y() + 10;
+		DrawFormatString(textX, textY, GetColor(255, 255, 255), "x%d", reverseRemaining);
 	}
 
 	// reach_select: reach_available_for がセットされていれば有効にする
