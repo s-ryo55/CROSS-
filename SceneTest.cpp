@@ -105,7 +105,15 @@ void SceneTest::Input()
 							board_state.Board_reset();
 							// リーチ候補はクリア
 							this->reach_available_for = 0;
-						} else {
+						}
+						else {
+							if (this->board_state.Draw_judge()) {
+								this->game_ptr->SetWinner(4); // 引き分け
+								this->game_ptr->ChageScene(3);
+								board_state.Board_reset();
+								// リーチ候補はクリア
+								this->reach_available_for = 0;
+							}
 							// 勝者がいなければリーチ判定（直前に打ったプレイヤー = turn_count）
 							int lastPlayer = board_state.GetTurn_count();
 
@@ -113,10 +121,12 @@ void SceneTest::Input()
 								// 自動宣言ではなく「宣言可能」にする（ボタンで宣言させる）
 								this->reach_available_for = lastPlayer;
 								// この時点で reach_select[0] を有効画像にして押せるようにする
-							} else {
+							}
+							else {
 								// リーチでなければ候補をクリア
 								this->reach_available_for = 0;
 							}
+						}
 						}
 					}
 				}

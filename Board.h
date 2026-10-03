@@ -47,6 +47,19 @@ public:
 		reverse_remaining = 5;
 	}
 
+	int Draw_judge()
+	{
+		for (int x = 0; x < 7; x++) {
+			for (int y = 0; y < 7; y++) {
+				if (board[x][y] == STATE_EMPTY) {
+					return 0; // ‹ó‚«‚ª‚ ‚é‚Ì‚Åˆø‚«•ª‚¯‚Å‚Í‚È‚¢
+				}
+			}
+		}
+	
+		return 1; // ‹ó‚«‚ª‚È‚¢‚Ì‚Åˆø‚«•ª‚¯
+	}
+
 	void TurnTurn()
 	{
 		turn_count = turn;
