@@ -35,11 +35,12 @@ void SceneTest::Init()
 	// 初期値
 	this->reverse_mode = false;
 	this->reach_available_for = 0;
+	this->reach_intent = false;
 }
 
-/// <summary>
-/// 入力処理
-/// </summary>
+///// <summary>
+///// 入力処理
+///// </summary>
 void SceneTest::Input()
 {
 	mouse.Read(); // マウスの状態を取得
@@ -59,15 +60,21 @@ void SceneTest::Input()
 	}
 
 	// リーチボタンの押下チェック
-	// reach_available_for が 0 でなければ、そのプレイヤーのリーチ宣言が可能とする
+	// - 既に「リーチ候補」がある場合は（従来どおり）宣言処理を行う
+	// - そうでない場合は「事前リーチモード」のトグルに使う（押したらリーチを作る場所にしか置けない）
 	if (this->mouse.IsClickSprite(this->reach_select[0]) == 1)
 	{
 		if (this->reach_available_for != 0) {
-			// 宣言処理
+			// 宣言処理（候補がセットされている場合）
 			this->board_state.DeclareReach(this->reach_available_for);
-			// 宣言済みにする
+			// 宣言済みにする（UIは別途）
 			this->reach_available_for = 0;
-			// 必要ならサウンドや UI をここで鳴らす
+			// 事前モードは解除しておく
+			this->reach_intent = false;
+		}
+		else {
+			// 候補が無い場合は「事前リーチモード」のトグル
+			this->reach_intent = !this->reach_intent;
 		}
 	}
 
@@ -94,40 +101,57 @@ void SceneTest::Input()
 				if (this->mouse.IsClickSpriteOnce(this->board_surface[x][y][0]) ==1)
 				{
 					// クリックされたときの処理
-					if(board_state.SetBoardState(x, y)) { // クリックされた座標の状態を取得
-						board_state.TurnTurn(); // ターンを進める
+					// 新ルール: 事前リーチモード( reach_intent ) によって配置可能な座標を制限する
+					bool isReachCreating = this->board_state.IsReachCreatingMove(x, y, currentPlayer);
 
-						// 勝者チェック
-						int winner = board_state.GetBoardStateAroundSelect();
-						if (winner != 0) {
-							this->game_ptr->SetWinner(winner);
-							this->game_ptr->ChageScene(3);
-							board_state.Board_reset();
-							// リーチ候補はクリア
-							this->reach_available_for = 0;
-						}
-						else {
-							if (this->board_state.Draw_judge()) {
-								this->game_ptr->SetWinner(4); // 引き分け
+					// 事前リーチモードがOFFなら「リーチを作る手」は置けない
+					if (!this->reach_intent && isReachCreating) {
+						// 無視（必要なら効果音／メッセージ）
+					}
+					// 事前リーチモードがONなら「リーチを作らない手」は置けない
+					else if (this->reach_intent && !isReachCreating) {
+						// 無視
+					}
+					else
+					{
+						// 許可された手なので従来通り設置処理
+						if(board_state.SetBoardState(x, y)) { // クリックされた座標の状態を取得
+							// 置いたら事前モードは解除
+							this->reach_intent = false;
+
+							board_state.TurnTurn(); // ターンを進める
+
+							// 勝者チェック
+							int winner = board_state.GetBoardStateAroundSelect();
+							if (winner != 0) {
+								this->game_ptr->SetWinner(winner);
 								this->game_ptr->ChageScene(3);
 								board_state.Board_reset();
 								// リーチ候補はクリア
 								this->reach_available_for = 0;
 							}
-							// 勝者がいなければリーチ判定（直前に打ったプレイヤー = turn_count）
-							int lastPlayer = board_state.GetTurn_count();
-
-							if (board_state.CheckReach(lastPlayer)) {
-								// 自動宣言ではなく「宣言可能」にする（ボタンで宣言させる）
-								this->reach_available_for = lastPlayer;
-								// この時点で reach_select[0] を有効画像にして押せるようにする
-							}
 							else {
-								// リーチでなければ候補をクリア
-								this->reach_available_for = 0;
+								if (this->board_state.Draw_judge()) {
+									this->game_ptr->SetWinner(4); // 引き分け
+									this->game_ptr->ChageScene(3);
+									board_state.Board_reset();
+									// リーチ候補はクリア
+									this->reach_available_for = 0;
+								}
+								// 勝者がいなければリーチ判定（直前に打ったプレイヤー = turn_count）
+								int lastPlayer = board_state.GetTurn_count();
+
+								if (board_state.CheckReach(lastPlayer)) {
+									// 自動宣言ではなく「宣言可能」にする（ボタンで宣言させる）
+									this->reach_available_for = lastPlayer;
+									// この時点で reach_select[0] を有効画像にして押せるようにする
+								}
+								else {
+									// リーチでなければ候補をクリア
+									this->reach_available_for = 0;
+								}
 							}
 						}
-						
 					}
 				}
 
@@ -180,8 +204,8 @@ void SceneTest::Draw()
 		this->reverse_select[1].Draw(); // ロック画像
 	}
 
-	// reach_select: reach_available_for がセットされていれば有効にする
-	if (this->reach_available_for != 0) {
+	// reach_select: 事前リーチモードか候補があれば有効にする（視覚的に分かるように）
+	if (this->reach_intent || this->reach_available_for != 0) {
 		this->reach_select[0].Draw(); // 有効画像
 	} else {
 		this->reach_select[1].Draw(); // ロック画像
@@ -207,6 +231,10 @@ void SceneTest::Select_tekki_dir(int arg_dir)
 	
 	
 }
+
+
+
+
 
 
 
