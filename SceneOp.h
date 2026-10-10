@@ -28,7 +28,7 @@ class SceneOp : public SceneBase
 
 	Sprite title_text;
 
-
+	Se se_bgm;
 
 
 public:
@@ -65,7 +65,7 @@ public:
 	/// <summary>
 	/// ‰¹ºÄ¶ˆ—
 	/// </summary>
-	void Sound_play() override {};
+	void Sound_play() override;
 
 };
 

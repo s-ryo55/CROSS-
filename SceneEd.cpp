@@ -24,6 +24,8 @@ void SceneEd::Init()
 		this->exit[i].Set_pos(1000, 400);
 		this->title[i].Set_pos(1000, 300);
 	}
+	this->se_bgm.Load_se("data/edbgm.mp3");
+	this->se_bgm.Set_playing();
 }
 
 void SceneEd::Input()
@@ -35,14 +37,19 @@ void SceneEd::Input()
 	if (this->mouse.IsClickSprite(this->restart[0]) == 1)
 	{
 		this->game_ptr->ChageScene(2);
+		this->se_bgm.Stop();
 	}
 	if (this->mouse.IsClickSprite(this->title[0]) == 1)
 	{
 		this->game_ptr->ChageScene(1);
+		this->se_bgm.Stop();
+
 	}
 	if (this->mouse.IsClickSprite(this->exit[0]) == 1)
 	{
 		PostQuitMessage(0);
+		this->se_bgm.Stop();
+
 	}
 }
 
@@ -60,6 +67,7 @@ void SceneEd::Update()
 void SceneEd::Sound_play()
 {
 	// •K—v‚È‚ç‚±‚±‚ÅBGM‚âSE‚ÌÄ¶‚ğs‚¤
+	this->se_bgm.Play_bgm();
 }
 
 /// <summary>
