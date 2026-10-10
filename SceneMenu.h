@@ -5,6 +5,7 @@
 #include "Background.h"		// 背景クラス
 #include "Sprite.h"		// スプライトクラス
 #include "Mouse.h"		// マウスクラス
+#include "Se.h"			// SEクラス
 
 /// <summary>
 /// エンディングシーン（SceneBaseクラスの子クラス）
@@ -30,6 +31,7 @@ class SceneMenu : public SceneBase
 
 	Sprite game_rule_text;
 
+	Se se;
 	
 
 public:
@@ -66,6 +68,6 @@ public:
 	/// <summary>
 	/// 音声再生処理
 	/// </summary>
-	void Sound_play() override {};
+	void Sound_play() override ;
 
 };

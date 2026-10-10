@@ -7,6 +7,7 @@
 #include "KeyReader.h"		// キーリーダー
 #include "Mouse.h"			// マウス
 #include "Board.h"          // ボードクラス
+#include"Se.h"
 
 #include <deque>
 
@@ -35,7 +36,9 @@ class SceneTest : public SceneBase
 
 	Sprite text_turn[4];
 
-	// リバース選択モード
+	Se se;
+
+	// リバース選択モード;
 	bool reverse_mode = false;
 
 	// 直前のリーチ宣言待ちアクティブ（0 = なし）
