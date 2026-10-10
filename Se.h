@@ -2,19 +2,11 @@
 #include <string>
 #include <DxLib.h>
 
-enum class SeType
-{
-	SE_TYPE_OP,
-	SE_TYPE_MENU,
-	SE_TYPE_PLAY,
-	SE_TYPE_REVERSE,
-};
-
 class Se
 {
-	bool se_loaded[4] = { false, false, false, false };
-	int se_hnd[4];
-
+	std::string file_path = "";
+	bool is_playing = false;
+	int se_hud;
 
 
 
@@ -28,43 +20,32 @@ public:
 	/// </summary>
 	/// <param name="arg_file_path">初期SEファイルパス</param>
 	Se(std::string arg_file_path){
-		// SEファイルを読み込む
-		this->Load_se();
+;
 	}
 	/// <summary>
 	/// SEファイルを読み込む
 	/// </summary>
 	/// <param name="arg_file_path">SEファイルパス</param>
-	void Load_se()
+	void Load_se(std::string arg_file_path)
 	{
-		// 指定されたファイルを読み込む
-	
-			this->se_hnd[static_cast<int>(SeType::SE_TYPE_OP)] = LoadSoundMem("data/start.mp3");
-			this->se_hnd[static_cast<int>(SeType::SE_TYPE_MENU)] = LoadSoundMem("data/menu.mp3");
-			this->se_hnd[static_cast<int>(SeType::SE_TYPE_PLAY)] = LoadSoundMem("data/player.mp3");
-			this->se_hnd[static_cast<int>(SeType::SE_TYPE_REVERSE)] = LoadSoundMem("data/reverse.mp3");
-		
-	
+
+		se_hud = LoadMusicMem(arg_file_path.c_str());
 	}
 
-	void Update(SeType type)
+	void Set_playing()
 	{
-		// SEの状態を更新する処理が必要な場合はここに追加
-		se_loaded[static_cast<int>(type)] = true;
-
+		is_playing = true;
 	}
 
-	void Play(SeType type)
+	void Play()
 	{
-		//音量
-		if (se_loaded[static_cast<int>(type)])
+		if (is_playing) 
 		{
-			ChangeVolumeSoundMem(255, this->se_hnd[static_cast<int>(type)]);
-			PlaySoundMem(this->se_hnd[static_cast<int>(type)], DX_PLAYTYPE_BACK);
+			PlayMusicMem(se_hud, DX_PLAYTYPE_BACK);
+			is_playing = false;
 		}
-
-
 	}
+
 
 
 
