@@ -5,6 +5,7 @@
 #include "Board.h"
 #include "Sprite.h"
 #include "Mouse.h"
+#include "Se.h"
 /// <summary>
 /// エンディングシーン（SceneBaseクラスの子クラス）
 /// </summary>
@@ -16,6 +17,7 @@ class SceneEd : public SceneBase
 	/// </summary>
 	Game* game_ptr;
 
+	Se se_bgm;
 	// 背景クラスのインスタンス
 	Background bg[5];
 

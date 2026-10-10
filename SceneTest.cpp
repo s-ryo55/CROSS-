@@ -8,6 +8,13 @@
 
 void SceneTest::Init()
 {
+
+	menu_se.Load_se("data/menu.mp3");
+	menu_se.Set_playing();
+
+	player_se.Load_se("data/player.mp3");
+	reverse_se.Load_se("data/reverse.mp3");
+
 	// 背景画像の読込
 	this->bg0.Load_image("data/ingame.png");
 	// 0: lock(使用不可) / 1: normal(使用可能だが未選択) / 2: selected(押している・選択中)
@@ -231,6 +238,7 @@ void SceneTest::Input()
 			// リバースモード時はターゲットを選んだらリバースを試行
 			if (this->reverse_mode && this->mouse.IsClickSpriteOnce(this->board_surface[x][y][0]) == 1)
 			{
+				reverse_se.Set_playing();
 				int actor = this->board_state.GetTurn();
 				bool doReverse = false;
 				if (this->board_state.UseReverse(x, y, actor)) {
@@ -285,9 +293,10 @@ void SceneTest::Input()
 				// 通常の置く操作（左クリック想定）
 				if (this->mouse.IsClickSpriteOnce(this->board_surface[x][y][0]) == 1)
 				{
+					
 					// クリックされたときの処理
 					if (board_state.SetBoardState(x, y)) { // クリックされた座標の状態を取得
-
+						player_se.Set_playing();
 						// 追加: 既に宣言されているリーチが他の手で潰れていないか検査
 						if (this->board_state.IsReachDeclared()) {
 							int declaredPlayer = this->board_state.GetReachPlayer();
@@ -442,7 +451,9 @@ void SceneTest::Draw()
 /// </summary>
 void SceneTest::Sound_play()
 {
-	bgm.Play();
+	menu_se.Play();
+	player_se.Play();
+	reverse_se.Play();
 
 }
 

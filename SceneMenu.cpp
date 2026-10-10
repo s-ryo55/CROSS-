@@ -5,8 +5,13 @@
 
 void SceneMenu::Init()
 {
-	se.Load_se("data/start.mp3");
-	se.Set_playing();
+	op_se.Load_se("data/start.mp3");
+	op_se.Set_playing();
+
+	menu_se.Load_se("data/menu.mp3");
+
+
+
 	// 背景画像の読込
 	this->bg0.Load_image("data/menu.png");
 	this->game_start[0].Load_image("data/start.png");
@@ -40,18 +45,21 @@ void SceneMenu::Input()
 	// ゲームスタートボタンが押されたかのチェック
 	if (this->mouse.IsClickSprite(this->game_start[0]) == 1)
 	{
+		menu_se.Set_playing();
 		// 押されていたらゲームシーンへ
 		this->game_ptr->ChageScene(2);
 	}
 	// ゲームルールボタンが押されたかのチェック
 	if (this->mouse.IsClickSprite(this->game_rule[0]) == 1)
 	{
+		menu_se.Set_playing();
 		// 押されていたらルールシーンへ
 		this->game_rule_text.hover = true;
 	}
 	// ゲーム終了ボタンが押されたかのチェック
 	if (this->mouse.IsClickSprite(this->game_exit[0]) == 1)
 	{
+		menu_se.Set_playing();
 		// 押されていたらゲーム終了
 		PostQuitMessage(0);
 
@@ -114,5 +122,6 @@ void SceneMenu::Draw()
 
 void SceneMenu::Sound_play()
 {
-	se.Play();
+	op_se.Play();
+	menu_se.Play();
 }

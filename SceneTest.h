@@ -36,7 +36,9 @@ class SceneTest : public SceneBase
 
 	Sprite text_turn[4];
 
-	Se se;
+	Se menu_se;
+	Se player_se;
+	Se reverse_se;
 
 	Se bgm;
 

@@ -7,6 +7,9 @@ void SceneOp::Init()
 	// ”wŒi‰æ‘œ‚Ì“Ç
 	this->bg0.Load_image("data/cross3.png");
 	this->title_text.Load_image("data/Messege.png");
+
+	this->se_bgm.Load_se("data/opbgm.mp3");
+	this->se_bgm.Set_playing();
 }
 
 /// <summary>
@@ -47,5 +50,9 @@ void SceneOp::Draw()
 		this->title_text.Draw();
 	}
 
+}
+void SceneOp::Sound_play()
+{
+	this->se_bgm.Play_bgm();
 }
 
