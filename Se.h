@@ -55,5 +55,14 @@ public:
 		}
 	}
 
+	void Stop()
+	{
+		if (is_playing)
+		{
+			StopMusicMem(se_hud);
+			is_playing = false;
+		}
+	}
+
 
 };
