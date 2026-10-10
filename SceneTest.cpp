@@ -50,6 +50,9 @@ void SceneTest::Init()
 
 	// 初回フラグ更新
 	UpdatePlayerFlags();
+
+	bgm.Load_se("data/playbgm.mp3");
+	bgm.Set_playing();
 }
 
 static void EnqueueReachIfNeeded(std::deque<int>& q, int player)
@@ -439,7 +442,7 @@ void SceneTest::Draw()
 /// </summary>
 void SceneTest::Sound_play()
 {
-
+	bgm.Play();
 
 }
 
