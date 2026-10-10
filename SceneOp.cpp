@@ -26,6 +26,7 @@ void SceneOp::Update()
 	// キーが押されたかのチェック
 	if (this->mouse.IsClickSprite(this->title_text) == 1)
 	{
+		
 		// 押されていたらテストシーンへ
 		this->game_ptr->ChageScene(1);
 	}

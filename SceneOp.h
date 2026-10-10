@@ -5,6 +5,7 @@
 #include "Background.h"		// 背景クラス
 #include "Sprite.h"		// スプライトクラス
 #include "Mouse.h"		// マウスクラス
+#include "Se.h"			// SEクラス
 
 
 /// <summary>
@@ -26,6 +27,8 @@ class SceneOp : public SceneBase
 	Background bg0;
 
 	Sprite title_text;
+
+
 
 
 public:

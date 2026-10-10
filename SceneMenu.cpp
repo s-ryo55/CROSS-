@@ -5,6 +5,7 @@
 
 void SceneMenu::Init()
 {
+	se.Update(SeType::SE_TYPE_OP);
 	// ”wŒi‰æ‘œ‚Ì“Çž
 	this->bg0.Load_image("data/menu.png");
 	this->game_start[0].Load_image("data/start.png");
@@ -87,6 +88,8 @@ void SceneMenu::Input()
 
 void SceneMenu::Update()
 {
+	se.Play(SeType::SE_TYPE_OP);
+
 	
 }
 
@@ -106,4 +109,9 @@ void SceneMenu::Draw()
 
 
 	
+}
+
+void SceneMenu::Sound_play()
+{
+	se.Play(SeType::SE_TYPE_OP);
 }

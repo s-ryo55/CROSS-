@@ -154,6 +154,7 @@
     <ClInclude Include="SceneMenu.h" />
     <ClInclude Include="SceneOp.h" />
     <ClInclude Include="SceneTest.h" />
+    <ClInclude Include="Se.h" />
     <ClInclude Include="Sprite.h" />
   </ItemGroup>
   <ItemGroup>
