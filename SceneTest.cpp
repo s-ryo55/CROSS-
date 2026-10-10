@@ -15,6 +15,9 @@ void SceneTest::Init()
 	player_se.Load_se("data/player.mp3");
 	reverse_se.Load_se("data/reverse.mp3");
 
+	bgm.Load_se("data/playbgm.mp3");
+	bgm.Set_playing();
+
 	// 背景画像の読込
 	this->bg0.Load_image("data/ingame.png");
 	// 0: lock(使用不可) / 1: normal(使用可能だが未選択) / 2: selected(押している・選択中)
@@ -58,8 +61,6 @@ void SceneTest::Init()
 	// 初回フラグ更新
 	UpdatePlayerFlags();
 
-	bgm.Load_se("data/playbgm.mp3");
-	bgm.Set_playing();
 }
 
 static void EnqueueReachIfNeeded(std::deque<int>& q, int player)
@@ -454,7 +455,7 @@ void SceneTest::Sound_play()
 	menu_se.Play();
 	player_se.Play();
 	reverse_se.Play();
-
+	bgm.Play_bgm();
 }
 
 /// <summary>
