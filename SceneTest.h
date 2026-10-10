@@ -40,6 +40,8 @@ class SceneTest : public SceneBase
 	Se player_se;
 	Se reverse_se;
 
+	Se bgm;
+
 	// リバース選択モード;
 	bool reverse_mode = false;
 
