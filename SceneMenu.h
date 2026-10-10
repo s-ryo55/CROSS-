@@ -31,7 +31,12 @@ class SceneMenu : public SceneBase
 
 	Sprite game_rule_text;
 
-	Se se;
+	Se op_se;
+
+	Se menu_se;
+
+
+
 	
 
 public:

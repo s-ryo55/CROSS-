@@ -36,7 +36,9 @@ class SceneTest : public SceneBase
 
 	Sprite text_turn[4];
 
-	Se se;
+	Se menu_se;
+	Se player_se;
+	Se reverse_se;
 
 	// リバース選択モード;
 	bool reverse_mode = false;
