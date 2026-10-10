@@ -35,7 +35,7 @@ class SceneMenu : public SceneBase
 
 	Se menu_se;
 
-
+		Se se_bgm;
 
 	
 

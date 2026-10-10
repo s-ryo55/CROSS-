@@ -5,12 +5,9 @@
 
 void SceneMenu::Init()
 {
-	op_se.Load_se("data/start.mp3");
-	op_se.Set_playing();
-
-	menu_se.Load_se("data/menu.mp3");
-
-
+	// BGM を SceneOp と同じファイルにする
+	this->se_bgm.Load_se("data/opbgm.mp3");
+	this->se_bgm.Set_playing();
 
 	// 背景画像の読込
 	this->bg0.Load_image("data/menu.png");
@@ -45,21 +42,18 @@ void SceneMenu::Input()
 	// ゲームスタートボタンが押されたかのチェック
 	if (this->mouse.IsClickSprite(this->game_start[0]) == 1)
 	{
-		menu_se.Set_playing();
 		// 押されていたらゲームシーンへ
 		this->game_ptr->ChageScene(2);
 	}
 	// ゲームルールボタンが押されたかのチェック
 	if (this->mouse.IsClickSprite(this->game_rule[0]) == 1)
 	{
-		menu_se.Set_playing();
 		// 押されていたらルールシーンへ
 		this->game_rule_text.hover = true;
 	}
 	// ゲーム終了ボタンが押されたかのチェック
 	if (this->mouse.IsClickSprite(this->game_exit[0]) == 1)
 	{
-		menu_se.Set_playing();
 		// 押されていたらゲーム終了
 		PostQuitMessage(0);
 
@@ -91,20 +85,15 @@ void SceneMenu::Input()
 	}
 
 
-	
+
 	
 }
 
 void SceneMenu::Update()
 {
-
-
-	
+	// 必要ならここで BGM を継続制御（現状は Sound_play で一度再生する設計）
 }
 
-/// <summary>
-/// 描画処理
-/// </summary>
 void SceneMenu::Draw()
 {
 	// 背景0を描画
@@ -117,11 +106,10 @@ void SceneMenu::Draw()
 	if(this->game_rule_text.hover)this->game_rule_text.Draw();
 
 
-	
 }
 
 void SceneMenu::Sound_play()
 {
-	op_se.Play();
-	menu_se.Play();
+	// SceneOp と同じ BGM をループ再生する
+	this->se_bgm.Play_bgm();
 }
