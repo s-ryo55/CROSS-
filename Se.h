@@ -46,6 +46,15 @@ public:
 		}
 	}
 
+	void Play_bgm()
+	{
+		if (is_playing)
+		{
+			PlayMusicMem(se_hud, DX_PLAYTYPE_LOOP);
+			is_playing = false;
+		}
+	}
+
 
 
 
